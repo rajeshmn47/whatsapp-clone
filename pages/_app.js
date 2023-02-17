@@ -1,5 +1,27 @@
-import '@/styles/globals.css'
+import "../styles/globals.css";
+import { useEffect } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import wrapper from "../store";
+import { loadUser } from "../actions/userAction";
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps }) {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { user, isAuthenticated, loading, error } = useSelector(
+    (state) => state.user
+  );
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
+  useEffect(() => {
+    console.log(user, "raveena");
+    if (user && user.username) {
+      console.log("crazystaag");
+    }
+  }, [user]);
+  return <Component {...pageProps} />;
 }
+
+
+export default wrapper.withRedux(MyApp, { debug: true });
