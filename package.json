@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "build": "APP_API=production next build",
+    "local": "APP_API=local NEXT_PUBLIC_APP_API=local next dev",
+    "dev": "APP_API=local next dev",
     "start": "next start",
     "lint": "next lint"
   },

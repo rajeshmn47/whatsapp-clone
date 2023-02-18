@@ -1,9 +1,9 @@
 import "../styles/globals.css";
 import { useEffect } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import wrapper from "../store";
-import { loadUser } from "../actions/userAction";
+import { loadUser, logout } from "../actions/userAction";
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
@@ -22,6 +22,5 @@ function MyApp({ Component, pageProps }) {
   }, [user]);
   return <Component {...pageProps} />;
 }
-
 
 export default wrapper.withRedux(MyApp, { debug: true });

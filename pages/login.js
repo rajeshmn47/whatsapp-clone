@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Index() {
   return (
     <>
-      <Login/>
+      <Login />
     </>
   );
 }

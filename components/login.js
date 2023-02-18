@@ -1,66 +1,92 @@
-import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../actions/userAction'
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../actions/userAction";
+import styled from "@emotion/styled";
 
+const SignUp = styled.div`
+  background-image: url("./whatsapp.png");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-repeat: repeat;
+  background-color: #efeae2;
+  height: 100vh;
+`;
+
+const Title = styled.h5`
+  margin-bottom: 10px;
+`;
+
+const Input = styled.input`
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #cccccc;
+`;
+
+const SubmitBtn = styled.input`
+  background-color: #d9fdd3;
+  padding: 10px 15px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  color: #000000;
+  text-transform: uppercase;
+`;
 
 export const Login = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
-  )
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
+  );
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (error) {
-
     }
     if (isAuthenticated) {
-
     }
-  }, [dispatch, loading, isAuthenticated, user, error])
+  }, [dispatch, loading, isAuthenticated, user, error]);
 
   const handlesubmit = async (e) => {
-    e.preventDefault()
-    console.log(username, password)
-    const formdata = { username: username, password: password }
-    dispatch(login(formdata))
-    console.log('ok')
-  }
+    e.preventDefault();
+    console.log(username, password);
+    const formdata = { username: username, password: password };
+    dispatch(login(formdata));
+    console.log("ok");
+  };
   return (
     <>
-      <div className='signup'>
-        <div className='signupbox'>
-          <div className='sociallogin google' onClick={()=>navigate('/googlelogin')}>
-      
-            Sign up with google
-          </div>
-        
-          <form className='loginform' onSubmit={(e) => handlesubmit(e)}>
+      <SignUp>
+        <div className="signupbox">
+          <form className="loginform" onSubmit={(e) => handlesubmit(e)}>
             <div>
-              <h5 className='font-bold'>email</h5>
-              <input
-                type='text'
-                className='inputs'
+              <Title>username</Title>
+              <Input
+                type="text"
+                className="inputs"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div>
-              <h5 className='font-bold'>password</h5>
-              <input
-                type='text'
-                className='inputs'
+              <Title>password</Title>
+              <Input
+                type="text"
+                className="inputs"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <input type='submit' className='submitbutton' value='Log in' />
+            <SubmitBtn type="submit" className="submitbutton" value="Log in" />
           </form>
         </div>
-      </div>
+      </SignUp>
     </>
-  )
-}
-export default Login
+  );
+};
+export default Login;

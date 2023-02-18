@@ -50,3 +50,26 @@ export const DELETE_USER_FAIL = "DELETE_USER_FAIL";
 export const DELETE_USER_RESET = "DELETE_USER_RESET";
 
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+function geturl() {
+  var current = process.env.APP_API;
+  console.log(current, "current");
+  if (current == "local") {
+    return "http://localhost:9000";
+  } else {
+    return "http://localhost:9000";
+  }
+}
+
+function getfrontendurl() {
+  var current = process.env.REACT_APP_API;
+  if (current == "local") {
+    return "http://localhost:3000";
+  } else {
+    return "https://dream-11-clone-mern-stack.vercel.app";
+  }
+}
+
+export const URL = geturl();
+export const ERL = "http://localhost:9000";
+export const FURL = getfrontendurl();
