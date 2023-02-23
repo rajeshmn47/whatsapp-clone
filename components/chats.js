@@ -1,6 +1,10 @@
 import styled from "@emotion/styled";
 
-const ChatsContainer = styled.div``;
+const ChatsContainer = styled.div`
+  .selected {
+    background-color: #f0f2f5;
+  }
+`;
 
 const ChatC = styled.div`
   display: flex;
@@ -9,20 +13,24 @@ const ChatC = styled.div`
   border-bottom: 1px solid #e9edef;
   background-color: #ffffff;
   width: 100%;
+  cursor: pointer;
+  :hover {
+    background-color: #f0f2f5;
+  }
 `;
 
 const Chat = styled.div`
   display: flex;
   align-items: flex-start;
   padding: 0 15px;
-  background-color: #ffffff;
+  background-color: transparent;
   justify-content: space-between;
   width: 100%;
 `;
 
 const UserImg = styled.img`
   max-height: 40px;
-  margin-right: 5px;
+  margin-right: 0px;
 `;
 
 const Details = styled.div`
@@ -48,17 +56,20 @@ const Message = styled.h6`
 `;
 
 const Time = styled.p`
-  width: 10%;
+  width: 7%;
   font-size: 12px;
   color: #667781;
 `;
 
-export default function Chats() {
+export default function Chats({ users, currentChat, setCurrentChat }) {
+  const handleClick = (a) => {
+    setCurrentChat(a);
+  };
   return (
     <ChatsContainer>
       <ChatC>
         <Chat>
-          <div style={{ width: "10%" }}>
+          <div style={{ width: "13%" }}>
             <UserImg src="./person.svg" alt="" />
           </div>
           <Details>
@@ -68,6 +79,24 @@ export default function Chats() {
           <Time>19:56</Time>
         </Chat>
       </ChatC>
+      {users.length > 0 &&
+        users.map((c, index) => (
+          <ChatC
+            onClick={() => handleClick(c)}
+            className={currentChat?.id == index + 1 && "selected"}
+          >
+            <Chat>
+              <div style={{ width: "13%" }}>
+                <UserImg src="./person.svg" alt="" />
+              </div>
+              <Details>
+                <Username>{c.name}</Username>
+                <Message>Please send text messages to interact.</Message>
+              </Details>
+              <Time>19:56</Time>
+            </Chat>
+          </ChatC>
+        ))}
     </ChatsContainer>
   );
 }

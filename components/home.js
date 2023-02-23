@@ -20,11 +20,24 @@ const Container = styled.div`
 `;
 
 const TopBar = styled.div`
-  height: 90px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 15px;
+  img {
+    margin-right: 16px;
+  }
+`;
+
+const ChatTopBar = styled.div`
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  background-color: #f0f2f5;
+  border-left: 1px solid #8696a0;
   img {
     margin-right: 16px;
   }
@@ -44,12 +57,13 @@ const RightBar = styled(Grid)`
 export default function Home() {
   const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
+  const [currentChat, setCurrentChat] = useState();
   const [html, setHtml] = useState(`${(<h1>i am html</h1>)}`);
   const router = useRouter();
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
-  console.log(Object.values(html), "iiiii");
+  console.log(currentChat, "iiiii");
   useEffect(() => {
     async function getusers() {
       const data = await axios.get(`${URL}/auth/users`);
@@ -94,11 +108,27 @@ export default function Home() {
               </Grid>
             </TopBar>
             <InputContainer />
-            <Chats />
+            <Chats
+              users={users}
+              currentChat={currentChat}
+              setCurrentChat={setCurrentChat}
+            />
             <BottomBar></BottomBar>
           </SideBar>
         </Grid>
         <RightBar item md={7.5} lg={7.5} style={{ float: "right" }}>
+          {currentChat && (
+            <ChatTopBar>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <img src="./person.svg" alt="" style={{ width: "40px" }} />
+                {currentChat.name}
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <img src="./search.svg" alt="" />
+                <img src="./more.svg" alt="" />
+              </div>
+            </ChatTopBar>
+          )}
           <div
             style={{
               width: "100%",
@@ -107,9 +137,7 @@ export default function Home() {
               justifyContent: "center",
               alignItems: "center",
             }}
-          >
-            <WhatsappIcon style={{ float: "right" }} />
-          </div>
+          ></div>
         </RightBar>
       </Grid>
     </Container>
