@@ -35,9 +35,28 @@ const ChatTopBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 37.5%;
+  width: 62.5%;
   padding: 0 15px;
   background-color: #f0f2f5;
   border-left: 1px solid #8696a0;
+  img {
+    margin-right: 16px;
+  }
+`;
+const ChatBottomBar = styled.div`
+  height: 70px;
+  display: flex;
+  width: 62.5%;
+  left: 37.5%;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  padding: 0 15px;
+  background-color: #f0f2f5;
   img {
     margin-right: 16px;
   }
@@ -118,16 +137,32 @@ export default function Home() {
         </Grid>
         <RightBar item md={7.5} lg={7.5} style={{ float: "right" }}>
           {currentChat && (
-            <ChatTopBar>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <img src="./person.svg" alt="" style={{ width: "40px" }} />
-                {currentChat.name}
+            <>
+              <div style={{ position: "relative", maxWidth: "100%" }}>
+                <ChatTopBar>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img src="./person.svg" alt="" style={{ width: "40px" }} />
+                    {currentChat.name}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img src="./search.svg" alt="" />
+                    <img src="./more.svg" alt="" />
+                  </div>
+                </ChatTopBar>
               </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <img src="./search.svg" alt="" />
-                <img src="./more.svg" alt="" />
+              <div style={{ position: "relative" }}>
+                <ChatBottomBar>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img src="./emoji.svg" alt="" />
+                    <img src="./attachments.svg" alt="" />
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <InputContainer />
+                    <img src="./voice.svg" alt="" />
+                  </div>
+                </ChatBottomBar>
               </div>
-            </ChatTopBar>
+            </>
           )}
           <div
             style={{

@@ -67,18 +67,6 @@ export default function Chats({ users, currentChat, setCurrentChat }) {
   };
   return (
     <ChatsContainer>
-      <ChatC>
-        <Chat>
-          <div style={{ width: "13%" }}>
-            <UserImg src="./person.svg" alt="" />
-          </div>
-          <Details>
-            <Username>+91 93477 27286</Username>
-            <Message>Please send text messages to interact.</Message>
-          </Details>
-          <Time>19:56</Time>
-        </Chat>
-      </ChatC>
       {users.length > 0 &&
         users.map((c, index) => (
           <ChatC
