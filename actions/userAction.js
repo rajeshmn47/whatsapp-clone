@@ -9,6 +9,7 @@ import {
   LOAD_USER_SUCCESS,
   LOAD_USER_REQUEST,
   LOAD_USER_FAIL,
+  ONLINE,
   URL,
 } from "../constants/userConstants";
 
@@ -76,5 +77,13 @@ export const logout = () => async (dispatch) => {
   } catch (error) {
     console.log(error.response, "asdfgh");
     dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
+  }
+};
+
+export const onlineStatus = (s) => async (dispatch) => {
+  try {
+    dispatch({ type: ONLINE, payload: s });
+  } catch (error) {
+    console.log(error.response, "asdfgh");
   }
 };

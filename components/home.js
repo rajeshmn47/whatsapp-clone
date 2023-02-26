@@ -85,9 +85,13 @@ export default function Home() {
   console.log(currentChat, "iiiii");
   useEffect(() => {
     async function getusers() {
-      const data = await axios.get(`${URL}/auth/users`);
-      console.log(data.data.message, "users");
-      setUsers([...data.data.message]);
+      try {
+        const data = await axios.get(`${URL}/auth/users`);
+        console.log(data.data.message, "users");
+        setUsers([...data.data.message]);
+      } catch {
+        console.log(error);
+      }
     }
     getusers();
   }, []);
@@ -105,7 +109,7 @@ export default function Home() {
               >
                 <Grid item md={2} lg={2}>
                   <img
-                    src={URL + user.profilephoto}
+                    src={URL + user?.profilephoto}
                     alt=""
                     style={{ width: "40px" }}
                   />

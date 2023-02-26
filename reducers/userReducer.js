@@ -39,6 +39,7 @@ import {
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAIL,
   CLEAR_ERRORS,
+  ONLINE,
 } from "../constants/userConstants";
 
 export const userReducer = (state = { user: {} }, action = {}) => {
@@ -69,6 +70,11 @@ export const userReducer = (state = { user: {} }, action = {}) => {
         loading: false,
         isAuthenticated: true,
         user: action.payload,
+      };
+    case ONLINE:
+      return {
+        ...state,
+        status: action.payload,
       };
     case LOAD_USER_SUCCESS:
       console.log(action.payload, "katrina");
