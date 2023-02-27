@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux";
 
 const ChatsContainer = styled.div`
   .selected {
@@ -62,6 +63,9 @@ const Time = styled.p`
 `;
 
 export default function Chats({ users, currentChat, setCurrentChat }) {
+  const { user, isAuthenticated, loading, error } = useSelector(
+    (state) => state.user
+  );
   const handleClick = (a) => {
     setCurrentChat(a);
   };
@@ -69,7 +73,8 @@ export default function Chats({ users, currentChat, setCurrentChat }) {
     <ChatsContainer>
       {users.length > 0 &&
         users.map((c, index) => (
-          <ChatC
+        c.id!=user?.id&&
+        <ChatC
             onClick={() => handleClick(c)}
             className={currentChat?.id == index + 1 && "selected"}
           >
@@ -84,6 +89,7 @@ export default function Chats({ users, currentChat, setCurrentChat }) {
               <Time>19:56</Time>
             </Chat>
           </ChatC>
+          
         ))}
     </ChatsContainer>
   );

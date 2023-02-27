@@ -24,7 +24,7 @@ const PageLayout = ({ children, footerDetails, categoryDetails }) => {
   );
   return (
     <Root>
-      {status ? <h1>connection is back</h1> : <h5>connection is not their</h5>}
+      {status && <h1>connection is back</h1>}
       {children}
     </Root>
   );
