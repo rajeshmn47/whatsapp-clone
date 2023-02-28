@@ -95,7 +95,15 @@ export default function Home() {
     }
     getusers();
   }, []);
-  useEffect(() => {}, []);
+  useEffect(()=>{
+    async function getchat(){
+    if(currentChat?.id){
+      const data=await axios.get(`${URL}/conversation/getconversation/${currentChat.id}/${user.id}`)
+      console.log(data,'data getting')
+    }
+  }
+  getchat()
+}, [currentChat]);
   return (
     <Container>
       <Grid container style={{ width: "100%" }}>
