@@ -77,6 +77,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState();
+  const [conversation, setConversation] = useState();
   const [html, setHtml] = useState(`${(<h1>i am html</h1>)}`);
   const router = useRouter();
   const { user, isAuthenticated, loading, error } = useSelector(
@@ -95,15 +96,18 @@ export default function Home() {
     }
     getusers();
   }, []);
-  useEffect(()=>{
-    async function getchat(){
-    if(currentChat?.id){
-      const data=await axios.get(`${URL}/conversation/getconversation/${currentChat.id}/${user.id}`)
-      console.log(data,'data getting')
+  useEffect(() => {
+    async function getchat() {
+      if (currentChat?.id) {
+        const data = await axios.get(
+          `${URL}/conversation/getconversation/${currentChat.id}/${user.id}`
+        );
+        console.log(data, "data getting");
+        setConversation(data.data.user);
+      }
     }
-  }
-  getchat()
-}, [currentChat]);
+    getchat();
+  }, [currentChat]);
   return (
     <Container>
       <Grid container style={{ width: "100%" }}>

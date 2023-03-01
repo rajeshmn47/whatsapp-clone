@@ -72,25 +72,26 @@ export default function Chats({ users, currentChat, setCurrentChat }) {
   return (
     <ChatsContainer>
       {users.length > 0 &&
-        users.map((c, index) => (
-        c.id!=user?.id&&
-        <ChatC
-            onClick={() => handleClick(c)}
-            className={currentChat?.id == index + 1 && "selected"}
-          >
-            <Chat>
-              <div style={{ width: "13%" }}>
-                <UserImg src="./person.svg" alt="" />
-              </div>
-              <Details>
-                <Username>{c.name}</Username>
-                <Message>Please send text messages to interact.</Message>
-              </Details>
-              <Time>19:56</Time>
-            </Chat>
-          </ChatC>
-          
-        ))}
+        users.map(
+          (c, index) =>
+            c.id != user?.id && (
+              <ChatC
+                onClick={() => handleClick(c)}
+                className={currentChat?.id == c.id && "selected"}
+              >
+                <Chat>
+                  <div style={{ width: "13%" }}>
+                    <UserImg src="./person.svg" alt="" />
+                  </div>
+                  <Details>
+                    <Username>{c.name}</Username>
+                    <Message>Please send text messages to interact.</Message>
+                  </Details>
+                  <Time>19:56</Time>
+                </Chat>
+              </ChatC>
+            )
+        )}
     </ChatsContainer>
   );
 }
