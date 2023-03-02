@@ -19,6 +19,20 @@ const Container = styled.div`
   width: 100%;
 `;
 
+const Messages = styled.div`
+  margin-top: 100px;
+  padding: 0 20px;
+  .own {
+    float: right !important;
+  }
+`;
+const Message = styled.div`
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 10px;
+  margin: 35px 0;
+  max-width: 190px;
+`;
 const TopBar = styled.div`
   height: 70px;
   display: flex;
@@ -78,6 +92,8 @@ export default function Home() {
   const [users, setUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState();
   const [conversation, setConversation] = useState();
+  const [message, setMessage] = useState();
+  const [messages, setMessages] = useState([]);
   const [html, setHtml] = useState(`${(<h1>i am html</h1>)}`);
   const router = useRouter();
   const { user, isAuthenticated, loading, error } = useSelector(
@@ -108,6 +124,29 @@ export default function Home() {
     }
     getchat();
   }, [currentChat]);
+  useEffect(() => {
+    async function getchat() {
+      if (conversation?.members) {
+        const data = await axios.get(
+          `${URL}/conversation/getmessages/${conversation.members}`
+        );
+        console.log(data.data.messages, "data obtained");
+        setMessages([...data.data.messages]);
+      }
+    }
+    getchat();
+  }, [conversation]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(message, conversation, "conversation");
+    const data = await axios.post(`${URL}/conversation/savemessage`, {
+      conversationid: `${conversation.members}`,
+      message: message,
+      senderid: user.id,
+    });
+    console.log(data, "data");
+  };
   return (
     <Container>
       <Grid container style={{ width: "100%" }}>
@@ -166,6 +205,17 @@ export default function Home() {
                   </div>
                 </ChatTopBar>
               </div>
+              <Messages>
+                {messages.map((m) => (
+                  <>
+                    <Message className={m.senderid === user.id && "own"}>
+                      {m.message}
+                    </Message>
+                  </>
+                ))}
+                <Message>rajesh</Message>
+                <Message className="own">savhom</Message>
+              </Messages>
               <div style={{ position: "relative" }}>
                 <ChatBottomBar>
                   <div style={{ display: "flex", alignItems: "center" }}>
@@ -173,7 +223,14 @@ export default function Home() {
                     <img src="./attachments.svg" alt="" />
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
-                    <InputContainer />
+                    <form onSubmit={handleSubmit}>
+                      <input
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Type a message"
+                      />
+                      <input type="submit" value="submit" />
+                    </form>
                     <img src="./voice.svg" alt="" />
                   </div>
                 </ChatBottomBar>
