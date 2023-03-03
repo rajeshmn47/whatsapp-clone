@@ -17,6 +17,7 @@ import axios from "axios";
 const Container = styled.div`
   background-color: #f0f2f5;
   width: 100%;
+  height: 100vh;
 `;
 
 const Messages = styled.div`
@@ -24,6 +25,8 @@ const Messages = styled.div`
   padding: 0 20px;
   .own {
     float: right !important;
+    background-color: #d9fdd3;
+    box-shadow: 0 1px 0.5px rgba(var(--shadow-rgb), 0.13);
   }
 `;
 const Message = styled.div`
@@ -76,7 +79,13 @@ const ChatBottomBar = styled.div`
   }
 `;
 
-const SideBar = styled.div``;
+const SideBar = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 37.5%;
+  height: 100%;
+`;
 
 const BottomBar = styled.div`
   height: 600px;
@@ -145,11 +154,12 @@ export default function Home() {
       message: message,
       senderid: user.id,
     });
-    console.log(data, "data");
+    console.log(data.data.messages, "data");
+    setMessages([...messages, data.data.messages]);
   };
   return (
     <Container>
-      <Grid container style={{ width: "100%" }}>
+      <Grid container style={{ width: "100%", height: "100%" }}>
         <Grid item md={4.5} lg={4.5}>
           <SideBar>
             <TopBar>
@@ -208,13 +218,11 @@ export default function Home() {
               <Messages>
                 {messages.map((m) => (
                   <>
-                    <Message className={m.senderid === user.id && "own"}>
+                    <Message className={m.senderid == user.id && "own"}>
                       {m.message}
                     </Message>
                   </>
                 ))}
-                <Message>rajesh</Message>
-                <Message className="own">savhom</Message>
               </Messages>
               <div style={{ position: "relative" }}>
                 <ChatBottomBar>
