@@ -9,10 +9,12 @@ import { useRouter } from "next/router";
 import { MoreHoriz } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import InputContainer from "./inputfield";
+import ChatInput from "./chatinput";
 import Chats from "./chats";
 import { URL } from "../constants/userConstants";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import io from "socket.io-client";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -23,10 +25,12 @@ const Container = styled.div`
 const Messages = styled.div`
   margin-top: 100px;
   padding: 0 20px;
+  margin-bottom: 100px;
   .own {
-    float: right !important;
     background-color: #d9fdd3;
     box-shadow: 0 1px 0.5px rgba(var(--shadow-rgb), 0.13);
+    margin-right: auto !important;
+    max-width: 55%;
   }
 `;
 const Message = styled.div`
@@ -35,12 +39,15 @@ const Message = styled.div`
   padding: 10px 10px;
   margin: 35px 0;
   max-width: 190px;
+  margin-left: auto +;
+  max-width: 55%;
 `;
 const TopBar = styled.div`
   height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #f0f2f5;
   padding: 0 15px;
   img {
     margin-right: 16px;
@@ -98,11 +105,16 @@ const RightBar = styled(Grid)`
 `;
 export default function Home() {
   const dispatch = useDispatch();
+  const socket = io.connect("http://localhost:4000");
   const [users, setUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState();
   const [conversation, setConversation] = useState();
   const [message, setMessage] = useState();
+  const scrollit = useRef();
   const [messages, setMessages] = useState([]);
+  const [onlineStatus, setOnlineStatus] = useState();
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [lastPong, setLastPong] = useState(null);
   const [html, setHtml] = useState(`${(<h1>i am html</h1>)}`);
   const router = useRouter();
   const { user, isAuthenticated, loading, error } = useSelector(
@@ -129,6 +141,11 @@ export default function Home() {
         );
         console.log(data, "data getting");
         setConversation(data.data.user);
+        const dat = await axios.get(
+          `http://localhost:4000/onlinestatus/${currentChat.id}`
+        );
+        console.log(dat, "onlinestatus");
+        setOnlineStatus(dat?.data[0]?.userid == currentChat.id);
       }
     }
     getchat();
@@ -146,6 +163,42 @@ export default function Home() {
     getchat();
   }, [conversation]);
 
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("connect");
+      setIsConnected(true);
+
+      socket.emit("add user", {
+        userid: user.id,
+      });
+    });
+
+    socket.on("disconnect", () => {
+      setIsConnected(false);
+    });
+
+    socket.on("ponged", () => {
+      setLastPong(new Date().toISOString());
+    });
+    socket.on("new message", (data) => {
+      console.log(data, "newmessa");
+      let url = "./notifications.mp3";
+      let audio = new Audio(url);
+      audio.play();
+      setMessages([...messages, { ...data.message }]);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("pong");
+    };
+  }, [user]);
+
+  const sendPing = () => {
+    socket.emit("ping");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(message, conversation, "conversation");
@@ -154,8 +207,31 @@ export default function Home() {
       message: message,
       senderid: user.id,
     });
-    console.log(data.data.messages, "data");
+    console.log(data.data.messages, "dat");
+    let recieverid =
+      data.data.messages.conversationid.split("+")[0] == user.id
+        ? data.data.messages.conversationid.split("+")[1]
+        : data.data.messages.conversationid.split("+")[0];
+    socket.emit("new message", {
+      message: message,
+      recieverid: recieverid,
+      senderid: user.id,
+      conversationid: conversation.members,
+    });
     setMessages([...messages, data.data.messages]);
+    setMessage("");
+    scrollit.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  const onlinestatus = async () => {
+    const data = await axios.get(
+      `http://localhost:8000/onlinestatus/${currentChat.id}`
+    );
+    console.log(data, "onlinestatus");
+    setOnlineStatus(data?.data[0]?.userid == currentChat.id);
   };
   return (
     <Container>
@@ -207,7 +283,12 @@ export default function Home() {
                 <ChatTopBar>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <img src="./person.svg" alt="" style={{ width: "40px" }} />
-                    {currentChat.name}
+                    <div>
+                      {currentChat.name}
+                      {onlineStatus && (
+                        <p style={{ fontSize: "12px" }}>online</p>
+                      )}
+                    </div>
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <img src="./search.svg" alt="" />
@@ -218,7 +299,10 @@ export default function Home() {
               <Messages>
                 {messages.map((m) => (
                   <>
-                    <Message className={m.senderid == user.id && "own"}>
+                    <Message
+                      className={m.senderid == user.id && "own"}
+                      ref={scrollit}
+                    >
                       {m.message}
                     </Message>
                   </>
@@ -232,12 +316,7 @@ export default function Home() {
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <form onSubmit={handleSubmit}>
-                      <input
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Type a message"
-                      />
-                      <input type="submit" value="submit" />
+                      <ChatInput message={message} setMessage={setMessage} />
                     </form>
                     <img src="./voice.svg" alt="" />
                   </div>

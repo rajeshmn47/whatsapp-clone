@@ -33,9 +33,6 @@ function MyApp({ Component, pageProps, ...rest }) {
   }, [dispatch]);
   useEffect(() => {
     console.log(user, "raveena");
-    if (user && user.username) {
-      console.log("crazystaag");
-    }
   }, [user]);
 
   return (

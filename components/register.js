@@ -35,6 +35,7 @@ const SubmitBtn = styled.input`
   width: 100%;
   color: #000000;
   text-transform: uppercase;
+  cursor: pointer;
 `;
 
 export const Signup = () => {

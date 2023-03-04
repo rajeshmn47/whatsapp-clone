@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import { login } from "../actions/userAction";
 import styled from "@emotion/styled";
 
@@ -45,7 +46,7 @@ export const Login = () => {
   );
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const Route = useRouter();
   useEffect(() => {
     if (error) {
     }
@@ -58,6 +59,7 @@ export const Login = () => {
     console.log(username, password);
     const formdata = { username: username, password: password };
     dispatch(login(formdata));
+    Route.push("/");
     console.log("ok");
   };
   return (
