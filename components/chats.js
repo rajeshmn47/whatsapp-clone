@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
+import { URL } from "../constants/userConstants";
 
 const ChatsContainer = styled.div`
   .selected {
@@ -30,8 +31,11 @@ const Chat = styled.div`
 `;
 
 const UserImg = styled.img`
-  max-height: 40px;
-  margin-right: 0px;
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 5px;
 `;
 
 const Details = styled.div`
@@ -81,7 +85,7 @@ export default function Chats({ users, currentChat, setCurrentChat }) {
               >
                 <Chat>
                   <div style={{ width: "13%" }}>
-                    <UserImg src="./person.svg" alt="" />
+                    <UserImg src={`${URL}${c?.profilephoto}`} alt="" />
                   </div>
                   <Details>
                     <Username>{c.name}</Username>

@@ -72,5 +72,6 @@ function getfrontendurl() {
 }
 
 export const URL = geturl();
+export const RURL = geturl();
 export const ERL = "http://localhost:9000";
 export const FURL = getfrontendurl();
