@@ -16,6 +16,7 @@ import { URL } from "../constants/userConstants";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import io from "socket.io-client";
+import Status from "./status";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -109,13 +110,14 @@ export default function Home() {
   const socket = io.connect("http://localhost:4000");
   const [users, setUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState();
-  const [showProfile, setShowProfile] = useState(true);
+  const [showProfile, setShowProfile] = useState(false);
   const [conversation, setConversation] = useState();
   const [message, setMessage] = useState();
   const scrollit = useRef();
   const [messages, setMessages] = useState([]);
   const [onlineStatus, setOnlineStatus] = useState();
   const [isConnected, setIsConnected] = useState(socket.connected);
+  const [status, setStatus] = useState(false);
   const [lastPong, setLastPong] = useState(null);
   const [html, setHtml] = useState(`${(<h1>i am html</h1>)}`);
   const router = useRouter();
@@ -241,146 +243,151 @@ export default function Home() {
   };
   return (
     <Container>
-      <Grid container style={{ width: "100%", height: "100%" }}>
-        <Grid item md={4.5} lg={4.5}>
-          <SideBar>
-            {showProfile ? (
-              <Profile
-                showProfile={showProfile}
-                setShowProfile={setShowProfile}
-              />
-            ) : (
+      {status ? (
+        <Status />
+      ) : (
+        <Grid container style={{ width: "100%", height: "100%" }}>
+          <Grid item md={4.5} lg={4.5}>
+            <SideBar>
+              {showProfile ? (
+                <Profile
+                  showProfile={showProfile}
+                  setShowProfile={setShowProfile}
+                />
+              ) : (
+                <>
+                  <TopBar>
+                    <Grid
+                      container
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Grid item md={2} lg={2}>
+                        <img
+                          src={URL + user?.profilephoto}
+                          alt=""
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleProfileClick()}
+                        />
+                      </Grid>
+                      <Grid
+                        item
+                        md={10}
+                        lg={10}
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <img
+                          src="./group.svg"
+                          alt=""
+                          style={{ cursor: "pointer" }}
+                        />
+                        <img
+                          src="./status.svg"
+                          alt=""
+                          style={{ cursor: "pointer" }}
+                          onClick={() => setStatus(true)}
+                        />
+                        <img
+                          src="./chat.svg"
+                          alt=""
+                          style={{ cursor: "pointer" }}
+                        />
+                        <img
+                          src="./more.svg"
+                          alt=""
+                          style={{ cursor: "pointer" }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </TopBar>
+                  <InputContainer />
+                  <Chats
+                    users={users}
+                    currentChat={currentChat}
+                    setCurrentChat={setCurrentChat}
+                  />
+                  <BottomBar></BottomBar>
+                </>
+              )}
+            </SideBar>
+          </Grid>
+          <RightBar item md={7.5} lg={7.5} style={{ float: "right" }}>
+            {currentChat && (
               <>
-                <TopBar>
-                  <Grid
-                    container
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Grid item md={2} lg={2}>
+                <div style={{ position: "relative", maxWidth: "100%" }}>
+                  <ChatTopBar>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                       <img
-                        src={URL + user?.profilephoto}
+                        src={`${URL}${currentChat?.profilephoto}`}
                         alt=""
                         style={{
                           width: "40px",
                           height: "40px",
-                          borderRadius: "50%",
                           cursor: "pointer",
+                          borderRadius: "50%",
                         }}
-                        onClick={() => handleProfileClick()}
                       />
-                    </Grid>
-                    <Grid
-                      item
-                      md={10}
-                      lg={10}
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <img
-                        src="./group.svg"
-                        alt=""
-                        style={{ cursor: "pointer" }}
-                      />
-                      <img
-                        src="./status.svg"
-                        alt=""
-                        style={{ cursor: "pointer" }}
-                      />
-                      <img
-                        src="./chat.svg"
-                        alt=""
-                        style={{ cursor: "pointer" }}
-                      />
-                      <img
-                        src="./more.svg"
-                        alt=""
-                        style={{ cursor: "pointer" }}
-                      />
-                    </Grid>
-                  </Grid>
-                </TopBar>
-                <InputContainer />
-                <Chats
-                  users={users}
-                  currentChat={currentChat}
-                  setCurrentChat={setCurrentChat}
-                />
-                <BottomBar></BottomBar>
+                      <div>
+                        {currentChat.name}
+                        {onlineStatus && (
+                          <p style={{ fontSize: "12px" }}>online</p>
+                        )}
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <img src="./search.svg" alt="" />
+                      <img src="./more.svg" alt="" />
+                    </div>
+                  </ChatTopBar>
+                </div>
+                <Messages>
+                  {messages.map((m) => (
+                    <>
+                      <Message
+                        className={m.senderid == user.id && "own"}
+                        ref={scrollit}
+                      >
+                        {m.message}
+                      </Message>
+                    </>
+                  ))}
+                </Messages>
+                <div style={{ position: "relative" }}>
+                  <ChatBottomBar>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <img src="./emoji.svg" alt="" />
+                      <img src="./attachments.svg" alt="" />
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <form onSubmit={handleSubmit}>
+                        <ChatInput message={message} setMessage={setMessage} />
+                      </form>
+                      <img src="./voice.svg" alt="" />
+                    </div>
+                  </ChatBottomBar>
+                </div>
               </>
             )}
-          </SideBar>
+            <div
+              style={{
+                width: "100%",
+                float: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            ></div>
+          </RightBar>
         </Grid>
-        <RightBar item md={7.5} lg={7.5} style={{ float: "right" }}>
-          {currentChat && (
-            <>
-              <div style={{ position: "relative", maxWidth: "100%" }}>
-                <ChatTopBar>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <img
-                      src={`${URL}${currentChat?.profilephoto}`}
-                      alt=""
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        cursor: "pointer",
-                        borderRadius: "50%",
-                      }}
-                    />
-                    <div>
-                      {currentChat.name}
-                      {onlineStatus && (
-                        <p style={{ fontSize: "12px" }}>online</p>
-                      )}
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <img src="./search.svg" alt="" />
-                    <img src="./more.svg" alt="" />
-                  </div>
-                </ChatTopBar>
-              </div>
-              <Messages>
-                {messages.map((m) => (
-                  <>
-                    <Message
-                      className={m.senderid == user.id && "own"}
-                      ref={scrollit}
-                    >
-                      {m.message}
-                    </Message>
-                  </>
-                ))}
-              </Messages>
-              <div style={{ position: "relative" }}>
-                <ChatBottomBar>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <img src="./emoji.svg" alt="" />
-                    <img src="./attachments.svg" alt="" />
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <form onSubmit={handleSubmit}>
-                      <ChatInput message={message} setMessage={setMessage} />
-                    </form>
-                    <img src="./voice.svg" alt="" />
-                  </div>
-                </ChatBottomBar>
-              </div>
-            </>
-          )}
-          <div
-            style={{
-              width: "100%",
-              float: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          ></div>
-        </RightBar>
-      </Grid>
+      )}
     </Container>
   );
 }
