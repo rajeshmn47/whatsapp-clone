@@ -11,6 +11,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import io from "socket.io-client";
 import { Grid } from "@mui/material";
+import Stories from "react-insta-stories";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -78,9 +79,9 @@ const SideBar = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  width: 37.5%;
+  width: 35%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: #54656f;
 `;
 
 const BottomBar = styled.div`
@@ -89,8 +90,8 @@ const BottomBar = styled.div`
 `;
 
 const RightBar = styled(Grid)`
-  background-image: url("./whatsapp.png");
   background-color: #111b21;
+  height: 100vh;
 `;
 
 const StatusContainer = styled.div`
@@ -161,16 +162,26 @@ export default function Status() {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const stories = ["./person.svg", "./edit.svg", "./more.svg"];
   const handleClick = (a) => {
     setCurrentChat(a);
+  };
+  const handlestoryend = () => {
+    if (currentIndex < 2) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setCurrentIndex(0);
+    }
   };
   return (
     <StatusContainer>
       <Grid container style={{ width: "100%", height: "100%" }}>
-        <Grid item md={4.5} lg={4.5}>
+        <Grid item md={4.2} lg={4.2}>
           <SideBar></SideBar>
         </Grid>
-        <RightBar item md={7.5} lg={7.5} style={{ float: "right" }}>
+        <RightBar item md={7.8} lg={7.8} style={{ float: "right" }}>
           <div
             style={{
               width: "100%",
@@ -179,7 +190,16 @@ export default function Status() {
               justifyContent: "center",
               alignItems: "center",
             }}
-          ></div>
+          >
+            <Stories
+              stories={stories}
+              defaultInterval={1500}
+              width={432}
+              height={768}
+              currentIndex={currentIndex}
+              onStoryEnd={handlestoryend}
+            />
+          </div>
         </RightBar>
       </Grid>
     </StatusContainer>
