@@ -1,7 +1,6 @@
 ![Screenshot from 2023-03-08 16-20-21](https://user-images.githubusercontent.com/24763499/223693977-9c95fab6-9775-4521-8e8f-014a6cc46aa1.png)
 ![Screenshot from 2023-03-08 16-20-09](https://user-images.githubusercontent.com/24763499/223694011-382039e2-6f58-4c15-8d1a-5277d5c8e1f5.png)
 ![Screenshot from 2023-03-08 16-20-04](https://user-images.githubusercontent.com/24763499/223694037-8da48b10-84f5-44fc-a71d-4b862b433156.png)
-![Screenshot from 2023-03-08 16-12-20](https://user-images.githubusercontent.com/24763499/223692746-3ed1a61d-8a78-4d8f-bd49-4fe9f276ffaa.png)
 ![Screenshot from 2023-03-08 16-18-25](https://user-images.githubusercontent.com/24763499/223693491-c6ad398f-b114-4c35-b7e3-f46c6a4aeae3.png)
 ![Screenshot from 2023-03-08 16-16-49](https://user-images.githubusercontent.com/24763499/223693097-2165d626-c4b9-4863-8e46-07bcd1b42cca.png)
 
