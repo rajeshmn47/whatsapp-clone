@@ -331,8 +331,8 @@ export default function Home() {
                         style={{
                           width: "40px",
                           height: "40px",
-                          cursor: "pointer",
                           borderRadius: "50%",
+                          objectFit: "cover"
                         }}
                       />
                       <div>
