@@ -7,10 +7,11 @@ import InputContainer from "./inputfield";
 import Profile from "./profile";
 import ChatInput from "./chatinput";
 import Chats from "./chats";
+import { RURL } from "../constants/userConstants";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import io from "socket.io-client";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import Stories from "react-insta-stories";
 
 const Container = styled.div`
@@ -81,7 +82,8 @@ const SideBar = styled.div`
   top: 0;
   width: 35%;
   height: 100%;
-  background-color: #54656f;
+  background-color: #2c353b;
+  padding: 20px 20px;
 `;
 
 const BottomBar = styled.div`
@@ -130,6 +132,16 @@ const UserImg = styled.img`
   margin-right: 5px;
 `;
 
+const UserImge = styled.img`
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 5px;
+  border: 1px solid #ffffff;
+  padding: 2px;
+`;
+
 const Details = styled.div`
   width: 80%;
 `;
@@ -158,16 +170,144 @@ const Time = styled.p`
   color: #667781;
 `;
 
+const MyStatus = styled.div`
+  display: flex;
+  color: #ffffff;
+  padding: 25px 0;
+  border-bottom: 1px solid rgb(151, 149, 149);
+  p {
+    color: rgb(151, 149, 149);
+    margin-top: 2px;
+    font-size: 12px;
+  }
+`;
+
+const Statuses = styled.div`
+  padding: 10px 0;
+`;
+const Statuse = styled.div`
+  display: flex;
+  color: #ffffff;
+  align-items: center;
+  margin-top: 10px;
+  cursor: pointer;
+`;
+
+const Name = styled.h3``;
+
+const Date = styled.p`
+  color: rgb(151, 149, 149);
+  margin-top: 5px;
+  font-size: 12px;
+`;
+
+const StoryContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  background-color: #111b21;
+  position: relative;
+`;
+
+const CloseIcon = styled.img`
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+`;
+
+const Upload = styled.div`
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Title = styled.p`
+  color: #008069;
+  margin-bottom: 14px;
+`;
+
+const Description = styled.p``;
+
+const Data = styled.p`
+  color: #8696a0;
+  font-size: 12px;
+  margin-bottom: 28px;
+  margin-top: 14px;
+  margin-left: 30px;
+  margin-right: 30px;
+`;
+
+const Edit = styled.img`
+  position: absolute;
+  left: 90%;
+  top: 55%;
+  cursor: pointer;
+`;
+
+const Saveimg = styled.img`
+  cursor: pointer;
+  position: absolute;
+  top: 0%;
+  right: 0;
+  width: 25px;
+  height: 25px;
+  object-fit: cover;
+`;
+
+const UploadImg = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const UploadContainer = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: green;
+  position: absolute;
+  bottom: -390px;
+  right: -130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export default function Status() {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
-
+  const [selectedStatus, setSelectedStatus] = useState(false);
+  const [image, setImage] = useState();
   const [currentIndex, setCurrentIndex] = useState(0);
   const stories = ["./person.svg", "./edit.svg", "./more.svg"];
+
+  useEffect(() => {
+    async function imageupload() {
+      if (image) {
+        const data = new FormData();
+        const fileName = Date.now() + image.name;
+        data.append("name", fileName);
+        data.append("file", image);
+        console.log(data);
+        await axios.post(`${RURL}/client/upload`, data);
+        const { da } = await axios.post(`${RURL}/status/savestatus`, {
+          postedby: user?.id,
+          url: `/${fileName}`,
+        });
+      }
+    }
+    imageupload();
+  }, [image]);
+
   const handleClick = (a) => {
     setCurrentChat(a);
   };
+
   const handlestoryend = () => {
     if (currentIndex < 2) {
       setCurrentIndex(currentIndex + 1);
@@ -175,32 +315,88 @@ export default function Status() {
       setCurrentIndex(0);
     }
   };
+
+  const handleSelect = () => {
+    setSelectedStatus(true);
+  };
+
+  const handleImage = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleClose = () => {
+    setSelectedStatus(false);
+  };
   return (
     <StatusContainer>
       <Grid container style={{ width: "100%", height: "100%" }}>
-        <Grid item md={4.2} lg={4.2}>
-          <SideBar></SideBar>
-        </Grid>
-        <RightBar item md={7.8} lg={7.8} style={{ float: "right" }}>
-          <div
-            style={{
-              width: "100%",
-              float: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+        {selectedStatus ? (
+          <StoryContainer>
             <Stories
               stories={stories}
-              defaultInterval={1500}
-              width={432}
+              width={732}
               height={768}
               currentIndex={currentIndex}
               onStoryEnd={handlestoryend}
             />
-          </div>
-        </RightBar>
+            <CloseIcon
+              src="./closewhite.svg"
+              alt=""
+              onClick={() => handleClose()}
+            />
+          </StoryContainer>
+        ) : (
+          <>
+            <Grid item md={4.2} lg={4.2}>
+              <SideBar>
+                <MyStatus>
+                  <UserImg src={`${URL}${user.profilephoto}`} alt="" />
+                  <div style={{ margin: "0 15px" }}>
+                    <h3>My Status</h3>
+                    <p>No updates</p>
+                  </div>
+                </MyStatus>
+                <Statuses>
+                  <p style={{ color: "rgb(151, 149, 149)" }}>VIEWED</p>
+                  <Statuse onClick={() => handleSelect()}>
+                    <UserImge src={`${URL}${user.profilephoto}`} alt="" />
+                    <div style={{ margin: "0 15px" }}>
+                      <Name>{user?.name}</Name>
+                      <Date>today at 13:26</Date>
+                    </div>
+                  </Statuse>
+                </Statuses>
+                <Upload>
+                  <Button component="label">
+                    {image ? (
+                      <UploadImg src={URL.createObjectURL(image)} alt="" />
+                    ) : (
+                      <UploadContainer>
+                        <UploadImg src="./camera.svg" alt="" />
+                      </UploadContainer>
+                    )}
+                    <input
+                      type="file"
+                      hidden
+                      onChange={(e) => handleImage(e)}
+                    />
+                  </Button>
+                </Upload>
+              </SideBar>
+            </Grid>
+            <RightBar item md={7.8} lg={7.8} style={{ float: "right" }}>
+              <div
+                style={{
+                  width: "100%",
+                  float: "right",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              ></div>
+            </RightBar>
+          </>
+        )}
       </Grid>
     </StatusContainer>
   );

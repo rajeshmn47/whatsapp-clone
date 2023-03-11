@@ -22,12 +22,7 @@ const PageLayout = ({ children, footerDetails, categoryDetails }) => {
   const { user, isAuthenticated, loading, error, status } = useSelector(
     (state) => state.user
   );
-  return (
-    <Root>
-      {status && <h1>connection is back</h1>}
-      {children}
-    </Root>
-  );
+  return <Root>{children}</Root>;
 };
 
 export default PageLayout;
