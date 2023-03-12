@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { URL } from "../constants/userConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { MoreHoriz } from "@mui/icons-material";
@@ -13,6 +12,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { Button, Grid } from "@mui/material";
 import Stories from "react-insta-stories";
+import UserCard from "./UserCard";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -195,7 +195,7 @@ const Statuse = styled.div`
 
 const Name = styled.h3``;
 
-const Date = styled.p`
+const DateA = styled.p`
   color: rgb(151, 149, 149);
   margin-top: 5px;
   font-size: 12px;
@@ -213,6 +213,13 @@ const StoryContainer = styled.div`
 const CloseIcon = styled.img`
   position: absolute;
   right: 20px;
+  top: 20px;
+  cursor: pointer;
+`;
+
+const BackIcon = styled.img`
+  position: absolute;
+  left: 20px;
   top: 20px;
   cursor: pointer;
 `;
@@ -270,22 +277,23 @@ const UploadContainer = styled.div`
   border-radius: 50%;
   background-color: green;
   position: absolute;
-  bottom: -390px;
+  bottom: -30px;
   right: -130px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-export default function Status() {
+export default function Status({ setStatus }) {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
   const [selectedStatus, setSelectedStatus] = useState(false);
+  const [statuses, setStatuses] = useState([]);
   const [image, setImage] = useState();
   const [currentIndex, setCurrentIndex] = useState(0);
   const stories = ["./person.svg", "./edit.svg", "./more.svg"];
-
+  console.log(selectedStatus, "selected");
   useEffect(() => {
     async function imageupload() {
       if (image) {
@@ -293,7 +301,6 @@ export default function Status() {
         const fileName = Date.now() + image.name;
         data.append("name", fileName);
         data.append("file", image);
-        console.log(data);
         await axios.post(`${RURL}/client/upload`, data);
         const { da } = await axios.post(`${RURL}/status/savestatus`, {
           postedby: user?.id,
@@ -303,6 +310,29 @@ export default function Status() {
     }
     imageupload();
   }, [image]);
+
+  useEffect(() => {
+    async function getallstatus() {
+      console.log("status");
+      const data = await axios.get(`${RURL}/status/getstatus/${user?.id}`);
+      const dataA = await axios.get(`${RURL}/status/allstatus`);
+      setStatuses(dataA.data.data);
+    }
+    getallstatus();
+  }, [user]);
+
+  useEffect(() => {
+    async function updateSeen() {
+      console.log("status");
+      if (selectedStatus) {
+        const data = await axios.get(
+          `${RURL}/status/seenstatus/${selectedStatus.id}/${user?.id}`
+        );
+        console.log(data, "seenstatus");
+      }
+    }
+    updateSeen();
+  }, [selectedStatus]);
 
   const handleClick = (a) => {
     setCurrentChat(a);
@@ -316,8 +346,8 @@ export default function Status() {
     }
   };
 
-  const handleSelect = () => {
-    setSelectedStatus(true);
+  const handleSelect = (a) => {
+    setSelectedStatus(a);
   };
 
   const handleImage = (e) => {
@@ -327,17 +357,23 @@ export default function Status() {
   const handleClose = () => {
     setSelectedStatus(false);
   };
+
   return (
     <StatusContainer>
       <Grid container style={{ width: "100%", height: "100%" }}>
         {selectedStatus ? (
           <StoryContainer>
             <Stories
-              stories={stories}
+              stories={[`${RURL}${selectedStatus.url}`]}
               width={732}
               height={768}
               currentIndex={currentIndex}
               onStoryEnd={handlestoryend}
+            />
+            <BackIcon
+              src="./backwhite.svg"
+              alt=""
+              onClick={() => handleClose()}
             />
             <CloseIcon
               src="./closewhite.svg"
@@ -350,7 +386,7 @@ export default function Status() {
             <Grid item md={4.2} lg={4.2}>
               <SideBar>
                 <MyStatus>
-                  <UserImg src={`${URL}${user.profilephoto}`} alt="" />
+                  <UserImg src={`${RURL}${user.profilephoto}`} alt="" />
                   <div style={{ margin: "0 15px" }}>
                     <h3>My Status</h3>
                     <p>No updates</p>
@@ -358,13 +394,18 @@ export default function Status() {
                 </MyStatus>
                 <Statuses>
                   <p style={{ color: "rgb(151, 149, 149)" }}>VIEWED</p>
-                  <Statuse onClick={() => handleSelect()}>
-                    <UserImge src={`${URL}${user.profilephoto}`} alt="" />
-                    <div style={{ margin: "0 15px" }}>
-                      <Name>{user?.name}</Name>
-                      <Date>today at 13:26</Date>
-                    </div>
-                  </Statuse>
+                  {statuses.length > 0 &&
+                    statuses.map((s) => (
+                      <Statuse onClick={() => handleSelect(s)}>
+                        <UserImge src={`${RURL}${s.url}`} alt="" />
+                        <div style={{ margin: "0 15px" }}>
+                          <Name>
+                            <UserCard i={s.posted_by} />
+                          </Name>
+                          <DateA>today at 13:26</DateA>
+                        </div>
+                      </Statuse>
+                    ))}
                 </Statuses>
                 <Upload>
                   <Button component="label">
@@ -393,7 +434,13 @@ export default function Status() {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-              ></div>
+              >
+                <CloseIcon
+                  src="./closewhite.svg"
+                  alt=""
+                  onClick={() => setStatus(false)}
+                />
+              </div>
             </RightBar>
           </>
         )}

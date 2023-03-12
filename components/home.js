@@ -244,7 +244,7 @@ export default function Home() {
   return (
     <Container>
       {status ? (
-        <Status />
+        <Status setStatus={setStatus} />
       ) : (
         <Grid container style={{ width: "100%", height: "100%" }}>
           <Grid item md={4.5} lg={4.5}>
