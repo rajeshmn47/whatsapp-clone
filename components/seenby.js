@@ -13,7 +13,7 @@ import UserCarde from "./UserCarde";
 const Status = styled.div`
   position: absolute;
   bottom: 30px;
-  left: 20px;
+  left: 50%;
   color: #ffffff;
   display: flex;
   align-items: center;
