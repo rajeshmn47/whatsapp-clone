@@ -5,6 +5,7 @@ import { MoreHoriz } from "@mui/icons-material";
 import InputContainer from "./inputfield";
 import Profile from "./profile";
 import ChatInput from "./chatinput";
+import SeenBy from "./seenby";
 import Chats from "./chats";
 import { RURL } from "../constants/userConstants";
 import { useEffect, useState, useRef } from "react";
@@ -380,32 +381,47 @@ export default function Status({ setStatus }) {
               alt=""
               onClick={() => handleClose()}
             />
+            <SeenBy status={selectedStatus} />
           </StoryContainer>
         ) : (
           <>
             <Grid item md={4.2} lg={4.2}>
               <SideBar>
                 <MyStatus>
-                  <UserImg src={`${RURL}${user.profilephoto}`} alt="" />
-                  <div style={{ margin: "0 15px" }}>
-                    <h3>My Status</h3>
-                    <p>No updates</p>
-                  </div>
+                  <Statuses>
+                    {statuses.length > 0 &&
+                      statuses.map(
+                        (s) =>
+                          user?.id == s.posted_by && (
+                            <Statuse onClick={() => handleSelect(s)}>
+                              <UserImge src={`${RURL}${s.url}`} alt="" />
+                              <div style={{ margin: "0 15px" }}>
+                                <Name>My Status</Name>
+                                <DateA>today at 13:26</DateA>
+                              </div>
+                            </Statuse>
+                          )
+                      )}
+                  </Statuses>
                 </MyStatus>
+
                 <Statuses>
                   <p style={{ color: "rgb(151, 149, 149)" }}>VIEWED</p>
                   {statuses.length > 0 &&
-                    statuses.map((s) => (
-                      <Statuse onClick={() => handleSelect(s)}>
-                        <UserImge src={`${RURL}${s.url}`} alt="" />
-                        <div style={{ margin: "0 15px" }}>
-                          <Name>
-                            <UserCard i={s.posted_by} />
-                          </Name>
-                          <DateA>today at 13:26</DateA>
-                        </div>
-                      </Statuse>
-                    ))}
+                    statuses.map(
+                      (s) =>
+                        user?.id != s.posted_by && (
+                          <Statuse onClick={() => handleSelect(s)}>
+                            <UserImge src={`${RURL}${s.url}`} alt="" />
+                            <div style={{ margin: "0 15px" }}>
+                              <Name>
+                                <UserCard i={s.posted_by} />
+                              </Name>
+                              <DateA>today at 13:26</DateA>
+                            </div>
+                          </Statuse>
+                        )
+                    )}
                 </Statuses>
                 <Upload>
                   <Button component="label">
