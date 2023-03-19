@@ -271,6 +271,7 @@ export default function Home() {
                             height: "40px",
                             borderRadius: "50%",
                             cursor: "pointer",
+                            objectFit:'cover'
                           }}
                           onClick={() => handleProfileClick()}
                         />
