@@ -112,6 +112,7 @@ export default function Home() {
   const [currentChat, setCurrentChat] = useState();
   const [showProfile, setShowProfile] = useState(false);
   const [conversation, setConversation] = useState();
+  const [conversations, setConversations] = useState();
   const [message, setMessage] = useState();
   const scrollit = useRef();
   const [messages, setMessages] = useState([]);
@@ -136,6 +137,18 @@ export default function Home() {
       }
     }
     getusers();
+  }, []);
+  useEffect(() => {
+    async function getconversations() {
+      try {
+        const data = await axios.get(`${URL}/conversation/getconversations/${user?.id}`);
+        console.log(data.data, "conversations");
+        setConversations([...data.data.message]);
+      } catch {
+        console.log(error);
+      }
+    }
+    getconversations();
   }, []);
   useEffect(() => {
     async function getchat() {
