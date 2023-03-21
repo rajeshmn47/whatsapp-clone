@@ -17,7 +17,7 @@ const UserImg = styled.img`
   width: 35px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 5px;
+  margin-right: 15px;
 `;
 
 const Details = styled.div`
@@ -48,8 +48,28 @@ const Time = styled.p`
   color: #667781;
 `;
 
-export default function UserCarde({ i }) {
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 380px;
+`;
+
+const New = styled.div`
+  background-color: green;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: #1fa855;
+`;
+
+export default function UserChat({ i, newm }) {
   const [user, setUser] = useState();
+  console.log(i, newm, "raj");
   useEffect(() => {
     async function getUser() {
       if (i) {
@@ -67,8 +87,19 @@ export default function UserCarde({ i }) {
       </div>
       <Details>
         <Username>{user?.name}</Username>
+        {newm?.length > 0 &&  newm.filter((n) => n.senderid == user?.id).length>0&&(
+          <Bottom>
+            <Message>
+              {
+                newm.filter((n) => n.senderid == user?.id)[
+                  newm.filter((n) => n.senderid == user?.id).length - 1
+                ].message
+              }
+            </Message>
+            <New>{newm.filter((n) => n.senderid == user?.id).length}</New>
+          </Bottom>
+        )}
       </Details>
-      <Time>19:56</Time>
     </Chat>
   );
 }

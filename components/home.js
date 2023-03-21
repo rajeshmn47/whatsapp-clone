@@ -31,7 +31,7 @@ const Messages = styled.div`
   .own {
     background-color: #d9fdd3;
     box-shadow: 0 1px 0.5px rgba(var(--shadow-rgb), 0.13);
-    margin-right: auto !important;
+    margin-left: auto !important;
     max-width: 55%;
   }
 `;
@@ -41,7 +41,7 @@ const Message = styled.div`
   padding: 10px 10px;
   margin: 35px 0;
   max-width: 190px;
-  margin-left: auto;
+  margin-right: auo;
   max-width: 55%;
 `;
 const TopBar = styled.div`
@@ -113,6 +113,7 @@ export default function Home() {
   const [showProfile, setShowProfile] = useState(false);
   const [conversation, setConversation] = useState();
   const [conversations, setConversations] = useState();
+  const [showUsers, setShowUsers] = useState(true);
   const [message, setMessage] = useState();
   const scrollit = useRef();
   const [messages, setMessages] = useState([]);
@@ -141,15 +142,19 @@ export default function Home() {
   useEffect(() => {
     async function getconversations() {
       try {
-        const data = await axios.get(`${URL}/conversation/getconversations/${user?.id}`);
-        console.log(data.data, "conversations");
-        setConversations([...data.data.message]);
+        if (user?.id) {
+          const data = await axios.get(
+            `${URL}/conversation/getconversations/${user?.id}`
+          );
+          console.log(data.data, "conversations");
+          setConversations([...data.data.user]);
+        }
       } catch {
         console.log(error);
       }
     }
     getconversations();
-  }, []);
+  }, [user]);
   useEffect(() => {
     async function getchat() {
       if (currentChat?.id) {
@@ -169,16 +174,16 @@ export default function Home() {
   }, [currentChat]);
   useEffect(() => {
     async function getchat() {
-      if (conversation?.members) {
+      if (conversation?.members&&user?.id) {
         const data = await axios.get(
-          `${URL}/conversation/getmessages/${conversation.members}`
+          `${URL}/conversation/getmessages/${conversation.members}/${user.id}`
         );
         console.log(data.data.messages, "data obtained");
         setMessages([...data.data.messages]);
       }
     }
     getchat();
-  }, [conversation]);
+  }, [conversation,user]);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -284,7 +289,7 @@ export default function Home() {
                             height: "40px",
                             borderRadius: "50%",
                             cursor: "pointer",
-                            objectFit:'cover'
+                            objectFit: "cover",
                           }}
                           onClick={() => handleProfileClick()}
                         />
@@ -323,11 +328,22 @@ export default function Home() {
                     </Grid>
                   </TopBar>
                   <InputContainer />
-                  <Chats
-                    users={users}
-                    currentChat={currentChat}
-                    setCurrentChat={setCurrentChat}
-                  />
+                  {showUsers ? (
+                    <Chats
+                      showusers
+                      users={users}
+                      conversations={conversations}
+                      currentChat={currentChat}
+                      setCurrentChat={setCurrentChat}
+                    />
+                  ) : (
+                    <Chats
+                      users={users}
+                      conversations={conversations}
+                      currentChat={currentChat}
+                      setCurrentChat={setCurrentChat}
+                    />
+                  )}
                   <BottomBar></BottomBar>
                 </>
               )}

@@ -1,6 +1,9 @@
 import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
 import { URL } from "../constants/userConstants";
+import UserCard from "./UserCard";
+import UserCarde from "./UserCarde";
+import UserChat from "./UserChat";
 
 const ChatsContainer = styled.div`
   .selected {
@@ -66,36 +69,82 @@ const Time = styled.p`
   color: #667781;
 `;
 
-export default function Chats({ users, currentChat, setCurrentChat }) {
+const New = styled.div`
+  background-color: green;
+  color: white;
+`;
+
+export default function Chats({
+  showusers,
+  users,
+  conversations,
+  currentChat,
+  setCurrentChat,
+}) {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
   const handleClick = (a) => {
-    setCurrentChat(a);
+    setCurrentChat(users.find((u) => u.id == a));
   };
+  console.log(users, "users");
   return (
-    <ChatsContainer>
-      {users.length > 0 &&
-        users.map(
-          (c, index) =>
-            c.id != user?.id && (
-              <ChatC
-                onClick={() => handleClick(c)}
-                className={currentChat?.id == c.id && "selected"}
-              >
-                <Chat>
-                  <div style={{ width: "13%" }}>
-                    <UserImg src={`${URL}${c?.profilephoto}`} alt="" />
-                  </div>
-                  <Details>
-                    <Username>{c.name}</Username>
-                    <Message>Please send text messages to interact.</Message>
-                  </Details>
-                  <Time>19:56</Time>
-                </Chat>
-              </ChatC>
-            )
-        )}
-    </ChatsContainer>
+    <>
+      {conversations?.length < 0 ? (
+        <ChatsContainer>
+          {users?.length > 0 &&
+            users.map(
+              (c, index) =>
+                c.id != user?.id && (
+                  <ChatC
+                    onClick={() => setCurrentChat(c)}
+                    className={currentChat?.id == c.id && "selected"}
+                  >
+                    <Chat>
+                      <div style={{ width: "13%" }}>
+                        <UserChat i={c?.id} />
+                      </div>
+
+                      <Time>19:56</Time>
+                    </Chat>
+                  </ChatC>
+                )
+            )}
+        </ChatsContainer>
+      ) : (
+        <ChatsContainer>
+          {conversations?.length > 0 &&
+            conversations.map((c, index) =>
+              c.memberone != user?.id ? (
+                <ChatC
+                  onClick={() => handleClick(c.memberone)}
+                  className={currentChat?.id == c.memberone && "selected"}
+                >
+                  <Chat>
+                    <div style={{ width: "13%" }}>
+                      <UserChat i={c?.memberone} newm={c.newmessage} />
+                    </div>
+
+                    <Time>19:56</Time>
+                  </Chat>
+                </ChatC>
+              ) : (
+                <ChatC
+                  onClick={() => handleClick(c.membertwo)}
+                  className={currentChat?.id == c.membertwo && "selected"}
+                >
+                  <Chat>
+                    <div style={{ width: "13%" }}>
+                      <UserChat i={c?.membertwo} newm={c.newmessage} />
+                    </div>
+
+                    <Time>19:56</Time>
+                  </Chat>
+                </ChatC>
+              )
+            )}
+        </ChatsContainer>
+      )}
+    </>
   );
 }

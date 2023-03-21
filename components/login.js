@@ -87,6 +87,15 @@ export const Login = () => {
             </div>
             <SubmitBtn type="submit" className="submitbutton" value="Log in" />
           </form>
+          <ul style={{ marginTop: "15px" }}>
+            if u dont have account{" "}
+            <a
+              onClick={() => Route.push("/register")}
+              style={{ color: "blue", cursor: "pointer" }}
+            >
+              register here
+            </a>
+          </ul>
         </div>
       </SignUp>
     </>

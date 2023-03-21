@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import { register } from "../actions/userAction";
 
 const SignUp = styled.div`
@@ -40,6 +41,7 @@ const SubmitBtn = styled.input`
 
 export const Signup = () => {
   const dispatch = useDispatch();
+  const Route = useRouter();
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
@@ -86,7 +88,7 @@ export const Signup = () => {
             <div>
               <Title>password</Title>
               <Input
-                type="text"
+                type="password"
                 className="inputs"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -94,6 +96,15 @@ export const Signup = () => {
             </div>
             <SubmitBtn type="submit" className="submitbutton" value="Sign up" />
           </form>
+          <ul style={{ marginTop: "15px" }}>
+            if u have account{" "}
+            <a
+              onClick={() => Route.push("/login")}
+              style={{ color: "blue", cursor: "pointer" }}
+            >
+              login here
+            </a>
+          </ul>
         </div>
       </SignUp>
     </>
