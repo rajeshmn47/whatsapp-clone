@@ -14,6 +14,7 @@ import ChatInput from "./chatinput";
 import Chats from "./chats";
 import { URL } from "../constants/userConstants";
 import { useEffect, useState, useRef } from "react";
+import moment from "moment";
 import axios from "axios";
 import io from "socket.io-client";
 import Status from "./status";
@@ -43,6 +44,14 @@ const Message = styled.div`
   max-width: 190px;
   margin-right: auo;
   max-width: 55%;
+  position: relative;
+`;
+
+const Tim = styled.div`
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  font-size: 12px;
 `;
 const TopBar = styled.div`
   height: 70px;
@@ -50,6 +59,7 @@ const TopBar = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #f0f2f5;
+  z-index: 1000;
   padding: 0 15px;
   img {
     margin-right: 16px;
@@ -68,6 +78,7 @@ const ChatTopBar = styled.div`
   padding: 0 15px;
   background-color: #f0f2f5;
   border-left: 1px solid #8696a0;
+  z-index: 10;
   img {
     margin-right: 16px;
   }
@@ -104,6 +115,7 @@ const BottomBar = styled.div`
 const RightBar = styled(Grid)`
   background-image: url("./whatsapp.png");
   background-color: #efeae2;
+  z-index: 100;
 `;
 export default function Home() {
   const dispatch = useDispatch();
@@ -126,7 +138,7 @@ export default function Home() {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
-  console.log(currentChat, "iiiii");
+  console.log(user, "i am user");
   useEffect(() => {
     async function getusers() {
       try {
@@ -174,7 +186,7 @@ export default function Home() {
   }, [currentChat]);
   useEffect(() => {
     async function getchat() {
-      if (conversation?.members&&user?.id) {
+      if (conversation?.members && user?.id) {
         const data = await axios.get(
           `${URL}/conversation/getmessages/${conversation.members}/${user.id}`
         );
@@ -183,7 +195,7 @@ export default function Home() {
       }
     }
     getchat();
-  }, [conversation,user]);
+  }, [conversation, user]);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -354,7 +366,12 @@ export default function Home() {
               <>
                 <div style={{ position: "relative", maxWidth: "100%" }}>
                   <ChatTopBar>
-                    <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
                       <img
                         src={`${URL}${currentChat?.profilephoto}`}
                         alt=""
@@ -386,6 +403,7 @@ export default function Home() {
                         ref={scrollit}
                       >
                         {m.message}
+                        <Tim>{moment(m.created_at).fromNow(true)}</Tim>
                       </Message>
                     </>
                   ))}

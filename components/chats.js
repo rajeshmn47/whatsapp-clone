@@ -124,8 +124,6 @@ export default function Chats({
                     <div style={{ width: "13%" }}>
                       <UserChat i={c?.memberone} newm={c.newmessage} />
                     </div>
-
-                    <Time>19:56</Time>
                   </Chat>
                 </ChatC>
               ) : (
@@ -137,8 +135,6 @@ export default function Chats({
                     <div style={{ width: "13%" }}>
                       <UserChat i={c?.membertwo} newm={c.newmessage} />
                     </div>
-
-                    <Time>19:56</Time>
                   </Chat>
                 </ChatC>
               )

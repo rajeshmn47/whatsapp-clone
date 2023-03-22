@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
+import moment from "moment";
 import { RURL } from "../constants/userConstants";
 
 const Chat = styled.div`
@@ -29,6 +30,7 @@ const Username = styled.h6`
   font-weight: 400;
   line-height: 21px;
   color: #111b21;
+  white-space: nowrap;
 `;
 
 const Message = styled.h6`
@@ -46,13 +48,14 @@ const Time = styled.p`
   width: 7%;
   font-size: 12px;
   color: #667781;
+  white-space: nowrap;
 `;
 
 const Bottom = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 380px;
+  width: 340px;
 `;
 
 const New = styled.div`
@@ -86,19 +89,30 @@ export default function UserChat({ i, newm }) {
         <UserImg src={`${RURL}${user?.profilephoto}`} alt="" />
       </div>
       <Details>
-        <Username>{user?.name}</Username>
-        {newm?.length > 0 &&  newm.filter((n) => n.senderid == user?.id).length>0&&(
-          <Bottom>
-            <Message>
-              {
+        <Bottom>
+          <Username>{user?.name}</Username>
+          <Time>
+            {newm.filter((n) => n.senderid == user?.id).length > 0 &&
+              moment(
                 newm.filter((n) => n.senderid == user?.id)[
                   newm.filter((n) => n.senderid == user?.id).length - 1
-                ].message
-              }
-            </Message>
-            <New>{newm.filter((n) => n.senderid == user?.id).length}</New>
-          </Bottom>
-        )}
+                ].created_at
+              ).fromNow(true)}
+          </Time>
+        </Bottom>
+        {newm?.length > 0 &&
+          newm.filter((n) => n.senderid == user?.id).length > 0 && (
+            <Bottom>
+              <Message>
+                {
+                  newm.filter((n) => n.senderid == user?.id)[
+                    newm.filter((n) => n.senderid == user?.id).length - 1
+                  ].message
+                }
+              </Message>
+              <New>{newm.filter((n) => n.senderid == user?.id).length}</New>
+            </Bottom>
+          )}
       </Details>
     </Chat>
   );
