@@ -110,7 +110,16 @@ export default function UserChat({ i, newm }) {
                   ].message
                 }
               </Message>
-              <New>{newm.filter((n) => n.senderid == user?.id).length}</New>
+              {newm.filter((n) => n.senderid == user?.id && n.is_seen == false)
+                .length > 0 && (
+                <New>
+                  {
+                    newm.filter(
+                      (n) => n.senderid == user?.id && n.is_seen == false
+                    ).length
+                  }
+                </New>
+              )}
             </Bottom>
           )}
       </Details>
