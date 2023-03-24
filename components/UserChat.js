@@ -36,6 +36,8 @@ const Username = styled.h6`
 const Message = styled.h6`
   flex-grow: 1;
   overflow: hidden;
+  display: flex;
+  align-items: center;
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
@@ -104,18 +106,20 @@ export default function UserChat({ i, newm }) {
           newm.filter((n) => n.senderid == user?.id).length > 0 && (
             <Bottom>
               <Message>
-                {
-                  newm.filter((n) => n.senderid == user?.id)[
-                    newm.filter((n) => n.senderid == user?.id).length - 1
-                  ].message
-                }
+                {newm[newm.length - 1].senderid == user?.id &&
+                newm[newm.length - 1].is_seen ? (
+                  <img src="./seen.svg" alt="" />
+                ) : (
+                  <img src="./sent.svg" alt="" />
+                )}
+                {newm[newm.length - 1].message}
               </Message>
               {newm.filter((n) => n.senderid == user?.id && n.is_seen == false)
                 .length > 0 && (
                 <New>
                   {
                     newm.filter(
-                      (n) => n.senderid == user?.id && n.is_seen == false
+                      (n) => n.senderid != user?.id && n.is_seen == false
                     ).length
                   }
                 </New>
