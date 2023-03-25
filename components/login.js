@@ -24,6 +24,7 @@ const Input = styled.input`
   margin-bottom: 10px;
   border-radius: 5px;
   outline: none;
+  width: 220px;
   border: 1px solid #cccccc;
 `;
 
@@ -33,7 +34,7 @@ const SubmitBtn = styled.input`
   outline: none;
   border: none;
   border-radius: 5px;
-  width: 100%;
+  width: 250px;
   color: #000000;
   text-transform: uppercase;
   cursor: pointer;

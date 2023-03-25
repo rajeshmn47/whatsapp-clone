@@ -24,6 +24,7 @@ const Input = styled.input`
   margin-bottom: 10px;
   border-radius: 5px;
   outline: none;
+  width: 220px;
   border: 1px solid #cccccc;
 `;
 
@@ -33,6 +34,7 @@ const SubmitBtn = styled.input`
   outline: none;
   border: none;
   border-radius: 5px;
+  width: 250px;
   width: 100%;
   color: #000000;
   text-transform: uppercase;
@@ -96,7 +98,7 @@ export const Signup = () => {
             </div>
             <SubmitBtn type="submit" className="submitbutton" value="Sign up" />
           </form>
-          <ul style={{ marginTop: "15px" }}>
+          <ul style={{ marginTop: "15px",textAlign:'center' }}>
             if u have account{" "}
             <a
               onClick={() => Route.push("/login")}

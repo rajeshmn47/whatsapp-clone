@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "@emotion/styled";
 import moment from "moment";
 import { RURL } from "../constants/userConstants";
+import { useSelector } from "react-redux";
 
 const Chat = styled.div`
   display: flex;
@@ -73,7 +74,10 @@ const New = styled.div`
 `;
 
 export default function UserChat({ i, newm }) {
-  const [user, setUser] = useState();
+  const [use, setUser] = useState();
+  const { user, isAuthenticated, loading, error } = useSelector(
+    (state) => state.user
+  );
   console.log(i, newm, "raj");
   useEffect(() => {
     async function getUser() {
@@ -88,11 +92,11 @@ export default function UserChat({ i, newm }) {
   return (
     <Chat>
       <div style={{ width: "" }}>
-        <UserImg src={`${RURL}${user?.profilephoto}`} alt="" />
+        <UserImg src={`${RURL}${use?.profilephoto}`} alt="" />
       </div>
       <Details>
         <Bottom>
-          <Username>{user?.name}</Username>
+          <Username>{use?.name}</Username>
           <Time>
             {newm.filter((n) => n.senderid == user?.id).length > 0 &&
               moment(
@@ -106,8 +110,8 @@ export default function UserChat({ i, newm }) {
           newm.filter((n) => n.senderid == user?.id).length > 0 && (
             <Bottom>
               <Message>
-                {newm[newm.length - 1].senderid == user?.id &&
-                newm[newm.length - 1].is_seen ? (
+                {((newm[newm.length - 1].senderid == user?.id) &&
+                newm[newm.length - 1].is_seen) ? (
                   <img src="./seen.svg" alt="" />
                 ) : (
                   <img src="./sent.svg" alt="" />
@@ -119,7 +123,7 @@ export default function UserChat({ i, newm }) {
                 <New>
                   {
                     newm.filter(
-                      (n) => n.senderid != user?.id && n.is_seen == false
+                      (n) => n.senderid == user?.id && n.is_seen == false
                     ).length
                   }
                 </New>
