@@ -118,12 +118,12 @@ export default function UserChat({ i, newm }) {
                 )}
                 {newm[newm.length - 1].message}
               </Message>
-              {newm.filter((n) => n.senderid == user?.id && n.is_seen == false)
+              {newm.filter((n) => n.senderid != user?.id && n.is_seen == false)
                 .length > 0 && (
                 <New>
                   {
                     newm.filter(
-                      (n) => n.senderid == user?.id && n.is_seen == false
+                      (n) => n.senderid != user?.id && n.is_seen == false
                     ).length
                   }
                 </New>
