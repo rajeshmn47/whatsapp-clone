@@ -98,7 +98,7 @@ export const Signup = () => {
             </div>
             <SubmitBtn type="submit" className="submitbutton" value="Sign up" />
           </form>
-          <ul style={{ marginTop: "15px",textAlign:'center' }}>
+          <ul style={{ marginTop: "15px", textAlign: "center" }}>
             if u have account{" "}
             <a
               onClick={() => Route.push("/login")}

@@ -110,12 +110,12 @@ export default function UserChat({ i, newm }) {
           newm.filter((n) => n.senderid == user?.id).length > 0 && (
             <Bottom>
               <Message>
-                {((newm[newm.length - 1].senderid == user?.id) &&
-                newm[newm.length - 1].is_seen) ? (
+                {newm[newm.length - 1].senderid == user?.id &&
+                newm[newm.length - 1].is_seen ? (
                   <img src="./seen.svg" alt="" />
-                ) : (
+                ) : newm[newm.length - 1].senderid == user?.id ? (
                   <img src="./sent.svg" alt="" />
-                )}
+                ) : null}
                 {newm[newm.length - 1].message}
               </Message>
               {newm.filter((n) => n.senderid != user?.id && n.is_seen == false)

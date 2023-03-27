@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import WhatsappIcon from "./icon";
 import UserIcon from "./usericon.jsx";
 import GroupsIcon from "@mui/icons-material/Groups";
+import { Emoji, EmojiStyle } from "emoji-picker-react";
 import ChatIcon from "@mui/icons-material/Chat";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
@@ -416,6 +417,7 @@ export default function Home() {
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <form onSubmit={handleSubmit}>
+                        <Emoji unified="1f423" size="25" />
                         <ChatInput message={message} setMessage={setMessage} />
                       </form>
                       <img src="./voice.svg" alt="" />
