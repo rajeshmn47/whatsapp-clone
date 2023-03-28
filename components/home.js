@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { MoreHoriz } from "@mui/icons-material";
 import styled from "@emotion/styled";
+import ReactEmoji from "react-emoji";
 import InputContainer from "./inputfield";
 import Profile from "./profile";
 import ChatInput from "./chatinput";
@@ -53,6 +54,7 @@ const Tim = styled.div`
   right: 5px;
   bottom: 5px;
   font-size: 12px;
+  color: #667781;
 `;
 const TopBar = styled.div`
   height: 70px;
@@ -385,9 +387,14 @@ export default function Home() {
                       />
                       <div>
                         {currentChat.name}
-                        {onlineStatus && (
-                          <p style={{ fontSize: "12px" }}>online</p>
-                        )}
+                        {currentChat?.last_seen &&
+                          (onlineStatus ? (
+                            <p style={{ fontSize: "12px" }}>online</p>
+                          ) : (
+                            <p>
+                              {moment(currentChat.last_seen).format("hh:mm")}
+                            </p>
+                          ))}
                       </div>
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -403,8 +410,8 @@ export default function Home() {
                         className={m.senderid == user.id && "own"}
                         ref={scrollit}
                       >
-                        {m.message}
-                        <Tim>{moment(m.created_at).fromNow(true)}</Tim>
+                        {ReactEmoji.emojify(m.message)}
+                        <Tim>{moment(m.created_at).format("HH:mm")}</Tim>
                       </Message>
                     </>
                   ))}
@@ -417,7 +424,6 @@ export default function Home() {
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <form onSubmit={handleSubmit}>
-                        <Emoji unified="1f423" size="25" />
                         <ChatInput message={message} setMessage={setMessage} />
                       </form>
                       <img src="./voice.svg" alt="" />

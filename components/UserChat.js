@@ -103,7 +103,7 @@ export default function UserChat({ i, newm }) {
                 newm.filter((n) => n.senderid == user?.id)[
                   newm.filter((n) => n.senderid == user?.id).length - 1
                 ].created_at
-              ).fromNow(true)}
+              ).format("DD/MM/YYYY")}
           </Time>
         </Bottom>
         {newm?.length > 0 &&

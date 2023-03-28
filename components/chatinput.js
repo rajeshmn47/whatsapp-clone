@@ -11,7 +11,7 @@ const InputEnclose = styled.div`
   background-color: #ffffff;
   height: 40px;
   border-radius: 5px;
-  width: 450px;
+  width: 650px;
 `;
 
 const SearchImg = styled.img`
