@@ -73,7 +73,7 @@ const New = styled.div`
   background-color: #1fa855;
 `;
 
-export default function UserChat({ i, newm }) {
+export default function UserChat({ i, newm, u }) {
   const [use, setUser] = useState();
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
@@ -90,47 +90,64 @@ export default function UserChat({ i, newm }) {
     getUser();
   }, [i]);
   return (
-    <Chat>
-      <div style={{ width: "" }}>
-        <UserImg src={`${RURL}${use?.profilephoto}`} alt="" />
-      </div>
-      <Details>
-        <Bottom>
-          <Username>{use?.name}</Username>
-          <Time>
-            {newm.filter((n) => n.senderid == user?.id).length > 0 &&
-              moment(
-                newm.filter((n) => n.senderid == user?.id)[
-                  newm.filter((n) => n.senderid == user?.id).length - 1
-                ].created_at
-              ).format("DD/MM/YYYY")}
-          </Time>
-        </Bottom>
-        {newm?.length > 0 &&
-          newm.filter((n) => n.senderid == user?.id).length > 0 && (
+    <>
+      {newm ? (
+        <Chat>
+          <div style={{ width: "" }}>
+            <UserImg src={`${RURL}${use?.profilephoto}`} alt="" />
+          </div>
+          <Details>
             <Bottom>
-              <Message>
-                {newm[newm.length - 1].senderid == user?.id &&
-                newm[newm.length - 1].is_seen ? (
-                  <img src="./seen.svg" alt="" />
-                ) : newm[newm.length - 1].senderid == user?.id ? (
-                  <img src="./sent.svg" alt="" />
-                ) : null}
-                {newm[newm.length - 1].message}
-              </Message>
-              {newm.filter((n) => n.senderid != user?.id && n.is_seen == false)
-                .length > 0 && (
-                <New>
-                  {
-                    newm.filter(
-                      (n) => n.senderid != user?.id && n.is_seen == false
-                    ).length
-                  }
-                </New>
-              )}
+              <Username>{use?.name}</Username>
+              <Time>
+                {newm.filter((n) => n.senderid == user?.id).length > 0 &&
+                  moment(
+                    newm.filter((n) => n.senderid == user?.id)[
+                      newm.filter((n) => n.senderid == user?.id).length - 1
+                    ].created_at
+                  ).format("DD/MM/YYYY")}
+              </Time>
             </Bottom>
-          )}
-      </Details>
-    </Chat>
+            {newm?.length > 0 &&
+              newm.filter((n) => n.senderid == user?.id).length > 0 && (
+                <Bottom>
+                  <Message>
+                    {newm[newm.length - 1].senderid == user?.id &&
+                    newm[newm.length - 1].is_seen ? (
+                      <img src="./seen.svg" alt="" />
+                    ) : newm[newm.length - 1].senderid == user?.id ? (
+                      <img src="./sent.svg" alt="" />
+                    ) : null}
+                    {newm[newm.length - 1].message}
+                  </Message>
+                  {newm.filter(
+                    (n) => n.senderid != user?.id && n.is_seen == false
+                  ).length > 0 && (
+                    <New>
+                      {
+                        newm.filter(
+                          (n) => n.senderid != user?.id && n.is_seen == false
+                        ).length
+                      }
+                    </New>
+                  )}
+                </Bottom>
+              )}
+          </Details>
+        </Chat>
+      ) : (
+        <Chat>
+          <div style={{ width: "" }}>
+            <UserImg src={`${RURL}${use?.profilephoto}`} alt="" />
+          </div>
+          <Details>
+            <Bottom>
+              <Username>{u?.name}</Username>
+              <Time></Time>
+            </Bottom>
+          </Details>
+        </Chat>
+      )}
+    </>
   );
 }

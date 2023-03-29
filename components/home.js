@@ -128,10 +128,11 @@ export default function Home() {
   const [showProfile, setShowProfile] = useState(false);
   const [conversation, setConversation] = useState();
   const [conversations, setConversations] = useState();
-  const [showUsers, setShowUsers] = useState(true);
+  const [showUsers, setShowUsers] = useState(false);
   const [message, setMessage] = useState();
   const scrollit = useRef();
   const [messages, setMessages] = useState([]);
+  const [typed, setTyped] = useState();
   const [onlineStatus, setOnlineStatus] = useState();
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [status, setStatus] = useState(false);
@@ -154,6 +155,11 @@ export default function Home() {
     }
     getusers();
   }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setTyped(null);
+    }, 1000);
+  }, [typed]);
   useEffect(() => {
     async function getconversations() {
       try {
@@ -222,7 +228,12 @@ export default function Home() {
       let url = "./notifications.mp3";
       let audio = new Audio(url);
       audio.play();
-      setMessages([...messages, { ...data.message }]);
+      setMessages([...messages, data.message]);
+    });
+
+    socket.on("typing", (data) => {
+      console.log(data, "typing");
+      setTyped(data);
     });
 
     return () => {
@@ -273,6 +284,14 @@ export default function Home() {
 
   const handleProfileClick = () => {
     setShowProfile(true);
+  };
+
+  const handleChange = (e, r) => {
+    setMessage(e.target.value);
+    socket.emit("typing", {
+      userid: user.id,
+      recieverid: r,
+    });
   };
   return (
     <Container>
@@ -333,6 +352,7 @@ export default function Home() {
                           src="./chat.svg"
                           alt=""
                           style={{ cursor: "pointer" }}
+                          onClick={() => setShowUsers(true)}
                         />
                         <img
                           src="./more.svg"
@@ -387,14 +407,18 @@ export default function Home() {
                       />
                       <div>
                         {currentChat.name}
-                        {currentChat?.last_seen &&
+                        {typed?.userid == currentChat.id ? (
+                          <p>typing</p>
+                        ) : (
+                          currentChat?.last_seen &&
                           (onlineStatus ? (
                             <p style={{ fontSize: "12px" }}>online</p>
                           ) : (
                             <p>
                               {moment(currentChat.last_seen).format("hh:mm")}
                             </p>
-                          ))}
+                          ))
+                        )}
                       </div>
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -424,7 +448,12 @@ export default function Home() {
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <form onSubmit={handleSubmit}>
-                        <ChatInput message={message} setMessage={setMessage} />
+                        <ChatInput
+                          message={message}
+                          setMessage={setMessage}
+                          handleChange={handleChange}
+                          c={currentChat}
+                        />
                       </form>
                       <img src="./voice.svg" alt="" />
                     </div>

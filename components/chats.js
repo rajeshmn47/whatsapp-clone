@@ -87,10 +87,10 @@ export default function Chats({
   const handleClick = (a) => {
     setCurrentChat(users.find((u) => u.id == a));
   };
-  console.log(users, "users");
+  console.log(users, showusers, "users");
   return (
     <>
-      {conversations?.length < 0 ? (
+      {showusers ? (
         <ChatsContainer>
           {users?.length > 0 &&
             users.map(
@@ -102,7 +102,7 @@ export default function Chats({
                   >
                     <Chat>
                       <div style={{ width: "13%" }}>
-                        <UserChat i={c?.id} />
+                        <UserChat i={c?.id} u={c} />
                       </div>
 
                       <Time>19:56</Time>

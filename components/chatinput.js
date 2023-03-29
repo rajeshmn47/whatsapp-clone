@@ -26,7 +26,12 @@ const Input = styled.input`
   width: 100%;
 `;
 
-export default function InputContainer({ message, setMessage }) {
+export default function InputContainer({
+  message,
+  setMessage,
+  handleChange,
+  c,
+}) {
   return (
     <Container>
       <Grid container>
@@ -42,7 +47,7 @@ export default function InputContainer({ message, setMessage }) {
             <Input
               placeholder="Type a message"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => handleChange(e, c.id)}
             />
           </InputEnclose>
         </Grid>
