@@ -223,12 +223,23 @@ export default function Home() {
     socket.on("ponged", () => {
       setLastPong(new Date().toISOString());
     });
-    socket.on("new message", (data) => {
+    socket.on("new message", async (data) => {
       console.log(data, "newmessa");
       let url = "./notifications.mp3";
       let audio = new Audio(url);
       audio.play();
       setMessages([...messages, data.message]);
+      try {
+        if (user?.id) {
+          const data = await axios.get(
+            `${URL}/conversation/getconversations/${user?.id}`
+          );
+          console.log(data.data, "conversations");
+          setConversations([...data.data.user]);
+        }
+      } catch {
+        console.log(error);
+      }
     });
 
     socket.on("typing", (data) => {
