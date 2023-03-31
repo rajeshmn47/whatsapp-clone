@@ -55,6 +55,8 @@ const Tim = styled.div`
   bottom: 5px;
   font-size: 12px;
   color: #667781;
+  display: flex;
+  align-items: center;
 `;
 const TopBar = styled.div`
   height: 70px;
@@ -446,7 +448,24 @@ export default function Home() {
                         ref={scrollit}
                       >
                         {ReactEmoji.emojify(m.message)}
-                        <Tim>{moment(m.created_at).format("HH:mm")}</Tim>
+                        <Tim>
+                          {moment(m.created_at).format("HH:mm")}
+                          {m.senderid == user?.id && m.is_seen ? (
+                            <img
+                              src="./seen.svg"
+                              alt=""
+                              style={{ marginLeft: "5px" }}
+                            />
+                          ) : (
+                            m.senderid == user?.id && (
+                              <img
+                                src="./sent.svg"
+                                alt=""
+                                style={{ marginLeft: "5px" }}
+                              />
+                            )
+                          )}
+                        </Tim>
                       </Message>
                     </>
                   ))}
