@@ -11,6 +11,7 @@ import {
   LOAD_USER_FAIL,
   ONLINE,
   URL,
+  NEW_MESSAGE,
 } from "../constants/userConstants";
 
 const headers = {
@@ -83,6 +84,14 @@ export const logout = () => async (dispatch) => {
 export const onlineStatus = (s) => async (dispatch) => {
   try {
     dispatch({ type: ONLINE, payload: s });
+  } catch (error) {
+    console.log(error.response, "asdfgh");
+  }
+};
+
+export const addnewm = (s) => async (dispatch) => {
+  try {
+    dispatch({ type: NEW_MESSAGE, payload: s });
   } catch (error) {
     console.log(error.response, "asdfgh");
   }

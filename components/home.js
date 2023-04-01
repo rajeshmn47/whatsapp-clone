@@ -20,6 +20,7 @@ import moment from "moment";
 import axios from "axios";
 import io from "socket.io-client";
 import Status from "./status";
+import { addnewm } from "../actions/userAction";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -134,6 +135,7 @@ export default function Home() {
   const [message, setMessage] = useState();
   const scrollit = useRef();
   const [messages, setMessages] = useState([]);
+  const [newm, setNewm] = useState();
   const [typed, setTyped] = useState();
   const [onlineStatus, setOnlineStatus] = useState();
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -144,12 +146,11 @@ export default function Home() {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
-  console.log(user, "i am user");
   useEffect(() => {
     async function getusers() {
       try {
         const data = await axios.get(`${URL}/auth/users`);
-        console.log(data.data.message, "users");
+
         setUsers([...data.data.message]);
       } catch {
         console.log(error);
@@ -169,7 +170,7 @@ export default function Home() {
           const data = await axios.get(
             `${URL}/conversation/getconversations/${user?.id}`
           );
-          console.log(data.data, "conversations");
+
           setConversations([...data.data.user]);
         }
       } catch {
@@ -184,7 +185,7 @@ export default function Home() {
         const data = await axios.get(
           `${URL}/conversation/getconversation/${currentChat.id}/${user.id}`
         );
-        console.log(data, "data getting");
+
         setConversation(data.data.user);
         const dat = await axios.get(
           `http://localhost:4000/onlinestatus/${currentChat.id}`
@@ -201,7 +202,7 @@ export default function Home() {
         const data = await axios.get(
           `${URL}/conversation/getmessages/${conversation.members}/${user.id}`
         );
-        console.log(data.data.messages, "data obtained");
+
         setMessages([...data.data.messages]);
       }
     }
@@ -209,15 +210,13 @@ export default function Home() {
   }, [conversation, user]);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connect");
-      setIsConnected(true);
+    if (newm > 0) {
+      console.log(newm);
+      dispatch(addnewm(newm));
+    }
+  }, [newm]);
 
-      socket.emit("add user", {
-        userid: user.id,
-      });
-    });
-
+  useEffect(() => {
     socket.on("disconnect", () => {
       setIsConnected(false);
     });
@@ -231,6 +230,12 @@ export default function Home() {
       let audio = new Audio(url);
       audio.play();
       setMessages([...messages, data.message]);
+      console.log(newm, "mui");
+      if (newm) {
+        setNewm(newm + 1);
+      } else {
+        setNewm(1);
+      }
       try {
         if (user?.id) {
           const data = await axios.get(
@@ -254,6 +259,17 @@ export default function Home() {
       socket.off("disconnect");
       socket.off("pong");
     };
+  }, []);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("connect");
+      setIsConnected(true);
+
+      socket.emit("add user", {
+        userid: user.id,
+      });
+    });
   }, [user]);
 
   const sendPing = () => {

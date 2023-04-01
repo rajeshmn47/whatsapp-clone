@@ -10,6 +10,7 @@ import {
   LOAD_USER_FAIL,
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
+  NEW_MESSAGE,
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAIL,
@@ -107,6 +108,11 @@ export const userReducer = (state = { user: {} }, action = {}) => {
         isAuthenticated: false,
         user: null,
         error: action.payload,
+      };
+    case NEW_MESSAGE:
+      return {
+        ...state,
+        message: action.payload,
       };
 
     case LOAD_USER_FAIL:
