@@ -10,6 +10,7 @@ import {
   LOAD_USER_REQUEST,
   LOAD_USER_FAIL,
   ONLINE,
+  TOKEN,
   URL,
   NEW_MESSAGE,
 } from "../constants/userConstants";
@@ -94,5 +95,17 @@ export const addnewm = (s) => async (dispatch) => {
     dispatch({ type: NEW_MESSAGE, payload: s });
   } catch (error) {
     console.log(error.response, "asdfgh");
+  }
+};
+
+export const loadToken = () => async (dispatch) => {
+  try {
+    console.log("rajivya");
+    const servertoken =
+      localStorage.getItem("server_token") &&
+      localStorage.getItem("server_token");
+    dispatch({ type: TOKEN, payload: servertoken });
+  } catch (error) {
+    console.log(error);
   }
 };

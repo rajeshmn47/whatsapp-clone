@@ -141,9 +141,12 @@ export default function Home() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [status, setStatus] = useState(false);
   const [lastPong, setLastPong] = useState(null);
+  const headers = {
+    Accept: "application/json",
+  };
   const [html, setHtml] = useState(`${(<h1>i am html</h1>)}`);
   const router = useRouter();
-  const { user, isAuthenticated, loading, error } = useSelector(
+  const { user, isAuthenticated, loading, error, token } = useSelector(
     (state) => state.user
   );
   useEffect(() => {
@@ -168,7 +171,14 @@ export default function Home() {
       try {
         if (user?.id) {
           const data = await axios.get(
-            `${URL}/conversation/getconversations/${user?.id}`
+            `${URL}/conversation/getconversations/${user?.id}`,
+            {
+              headers: {
+                ...headers,
+                "Content-Type": "application/json",
+                servertoken: token,
+              },
+            }
           );
 
           setConversations([...data.data.user]);
@@ -178,14 +188,23 @@ export default function Home() {
       }
     }
     getconversations();
-  }, [user]);
+  }, [user, token]);
   useEffect(() => {
     async function getchat() {
-      if (currentChat?.id) {
-        const data = await axios.get(
-          `${URL}/conversation/getconversation/${currentChat.id}/${user.id}`
+      if (currentChat?.id && token) {
+        console.log(token, "token");
+        const data = await axios(
+          `${URL}/conversation/getconversation/${currentChat.id}/${user.id}`,
+          {
+            method: "get",
+            headers: {
+              ...headers,
+              "Content-Type": "application/json",
+              servertoken: token,
+            },
+          }
         );
-
+        console.log(data, "cong");
         setConversation(data.data.user);
         const dat = await axios.get(
           `http://localhost:4000/onlinestatus/${currentChat.id}`
@@ -195,19 +214,27 @@ export default function Home() {
       }
     }
     getchat();
-  }, [currentChat]);
+  }, [currentChat, token]);
   useEffect(() => {
     async function getchat() {
-      if (conversation?.members && user?.id) {
-        const data = await axios.get(
-          `${URL}/conversation/getmessages/${conversation.members}/${user.id}`
+      if (conversation?.members && user?.id && token) {
+        const data = await axios(
+          `${URL}/conversation/getmessages/${conversation.members}/${user.id}`,
+          {
+            method: "get",
+            headers: {
+              ...headers,
+              "Content-Type": "application/json",
+              servertoken: token,
+            },
+          }
         );
-
+        console.log(data, "cameravovo");
         setMessages([...data.data.messages]);
       }
     }
     getchat();
-  }, [conversation, user]);
+  }, [conversation, user, token]);
 
   useEffect(() => {
     if (newm > 0) {
@@ -279,12 +306,20 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(message, conversation, "conversation");
-    const data = await axios.post(`${URL}/conversation/savemessage`, {
-      conversationid: `${conversation.members}`,
-      message: message,
-      senderid: user.id,
+    const data = await axios(`${URL}/conversation/savemessage`, {
+      method: "POST",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+        servertoken: token,
+      },
+      data: {
+        conversationid: `${conversation.members}`,
+        message: message,
+        senderid: user.id,
+      },
     });
-    console.log(data.data.messages, "dat");
+    console.log(data.data, "dat");
     let recieverid =
       data.data.messages.conversationid.split("+")[0] == user.id
         ? data.data.messages.conversationid.split("+")[1]

@@ -11,6 +11,7 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
   NEW_MESSAGE,
+  TOKEN,
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAIL,
@@ -113,6 +114,11 @@ export const userReducer = (state = { user: {} }, action = {}) => {
       return {
         ...state,
         message: action.payload,
+      };
+    case TOKEN:
+      return {
+        ...state,
+        token: action.payload,
       };
 
     case LOAD_USER_FAIL:

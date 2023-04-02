@@ -78,12 +78,10 @@ export default function UserChat({ i, newm, u }) {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
-  console.log(i, newm, "raj");
   useEffect(() => {
     async function getUser() {
       if (i) {
         const data = await axios.get(`${RURL}/auth/getuser/${i}`);
-        console.log(data, "getuser");
         setUser(data.data.data);
       }
     }

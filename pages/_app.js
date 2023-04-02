@@ -6,7 +6,12 @@ import { Provider } from "react-redux";
 import { useSelector, useDispatch } from "react-redux";
 import { Metadata } from "next";
 import { useRouter } from "next/router";
-import { loadUser, logout, onlineStatus } from "../actions/userAction";
+import {
+  loadToken,
+  loadUser,
+  logout,
+  onlineStatus,
+} from "../actions/userAction";
 import PageLayout from "../components/PageLayout";
 
 function MyApp({ Component, pageProps, ...rest }) {
@@ -32,6 +37,7 @@ function MyApp({ Component, pageProps, ...rest }) {
   }, []);
   useEffect(() => {
     dispatch(loadUser());
+    dispatch(loadToken());
   }, [dispatch]);
   useEffect(() => {
     console.log(user, "raveena");
