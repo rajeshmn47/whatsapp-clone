@@ -363,7 +363,7 @@ export default function Home() {
         <Status setStatus={setStatus} />
       ) : (
         <Grid container style={{ width: "100%", height: "100%" }}>
-          <Grid item md={4.5} lg={4.5}>
+          <Grid item md={4.5} lg={4.5}  sm={4.5}>
             <SideBar>
               {showProfile ? (
                 <Profile
@@ -448,7 +448,7 @@ export default function Home() {
               )}
             </SideBar>
           </Grid>
-          <RightBar item md={7.5} lg={7.5} style={{ float: "right" }}>
+          <RightBar item md={7.5}  sm={7.5} lg={7.5} style={{ float: "right" }}>
             {currentChat && (
               <>
                 <div style={{ position: "relative", maxWidth: "100%" }}>
