@@ -55,13 +55,13 @@ export default function SeenBy({ status }) {
   useEffect(() => {
     async function getseen() {
       if (status) {
-        console.log(status.seen_by, "seenby");
-        let a = status.seen_by.split("user").length - 1;
+        console.log(status?.seen_by, "seenby");
+        let a = status?.seen_by?.split("user").length - 1;
         setSeenBy(a);
         let users = [];
-        let seen = status.seen_by.split("+");
+        let seen = status?.seen_by?.split("+");
         console.log(seen, "seen");
-        for (let i = 0; i < seen.length; i++) {
+        for (let i = 0; i < seen?.length; i++) {
           users.push(seen[i].split("user")[1]);
         }
         setSeenUsers([...users]);

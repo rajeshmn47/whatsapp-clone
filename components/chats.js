@@ -87,7 +87,6 @@ export default function Chats({
   const handleClick = (a) => {
     setCurrentChat(users.find((u) => u.id == a));
   };
-  console.log(users, showusers, "users");
   return (
     <>
       {showusers ? (

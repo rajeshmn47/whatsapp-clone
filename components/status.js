@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { MoreHoriz } from "@mui/icons-material";
+import moment from "moment";
 import InputContainer from "./inputfield";
 import Profile from "./profile";
 import ChatInput from "./chatinput";
@@ -318,6 +319,7 @@ export default function Status({ setStatus }) {
       const data = await axios.get(`${RURL}/status/getstatus/${user?.id}`);
       const dataA = await axios.get(`${RURL}/status/allstatus`);
       setStatuses(dataA.data.data);
+      console.log(statuses, "stay");
     }
     getallstatus();
   }, [user]);
@@ -397,7 +399,9 @@ export default function Status({ setStatus }) {
                               <UserImge src={`${RURL}${s.url}`} alt="" />
                               <div style={{ margin: "0 15px" }}>
                                 <Name>My Status</Name>
-                                <DateA>today at 13:26</DateA>
+                                <DateA>
+                                  {moment(s.created_at).format("HH:mm")}
+                                </DateA>
                               </div>
                             </Statuse>
                           )
@@ -417,7 +421,9 @@ export default function Status({ setStatus }) {
                               <Name>
                                 <UserCard i={s.posted_by} />
                               </Name>
-                              <DateA>today at 13:26</DateA>
+                              <DateA>
+                                {moment(s.created_at).format("HH:mm")}
+                              </DateA>
                             </div>
                           </Statuse>
                         )

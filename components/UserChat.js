@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import moment from "moment";
 import { RURL } from "../constants/userConstants";
 import { useSelector } from "react-redux";
+import { getDisplayDate } from "../utils/dateformat,js";
 
 const Chat = styled.div`
   display: flex;
@@ -99,11 +100,12 @@ export default function UserChat({ i, newm, u }) {
               <Username>{use?.name}</Username>
               <Time>
                 {newm.filter((n) => n.senderid == user?.id).length > 0 &&
-                  moment(
+                  getDisplayDate(
                     newm.filter((n) => n.senderid == user?.id)[
                       newm.filter((n) => n.senderid == user?.id).length - 1
-                    ].created_at
-                  ).format("DD/MM/YYYY")}
+                    ].created_at,
+                    "date"
+                  )}
               </Time>
             </Bottom>
             {newm?.length > 0 &&

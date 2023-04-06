@@ -13,6 +13,7 @@ import ReactEmoji from "react-emoji";
 import InputContainer from "./inputfield";
 import Profile from "./profile";
 import ChatInput from "./chatinput";
+import { getDisplayDate, getSamedayorNot } from "../utils/dateformat,js";
 import Chats from "./chats";
 import { URL } from "../constants/userConstants";
 import { useEffect, useState, useRef } from "react";
@@ -21,6 +22,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import Status from "./status";
 import { addnewm } from "../actions/userAction";
+import { sameDayorNot } from "../utils/dateformat,js";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -48,6 +50,17 @@ const Message = styled.div`
   margin-right: auo;
   max-width: 55%;
   position: relative;
+`;
+
+const MessageDate = styled.div`
+  background-color: #ffffff;
+  color: #54656f;
+  font-size: 12px;
+  padding: 10px 10px;
+  border-radius: 5px;
+  max-width: 100px;
+  text-align: center;
+  margin: 0 auto;
 `;
 
 const Tim = styled.div`
@@ -257,7 +270,6 @@ export default function Home() {
       let audio = new Audio(url);
       audio.play();
       setMessages([...messages, data.message]);
-      console.log(newm, "mui");
       if (newm) {
         setNewm(newm + 1);
       } else {
@@ -331,8 +343,9 @@ export default function Home() {
       conversationid: conversation.members,
     });
     setMessages([...messages, data.data.messages]);
+    console.log(messages, "mui");
     setMessage("");
-    scrollit.current.scrollIntoView({
+    scrollit.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
@@ -363,7 +376,7 @@ export default function Home() {
         <Status setStatus={setStatus} />
       ) : (
         <Grid container style={{ width: "100%", height: "100%" }}>
-          <Grid item md={4.5} lg={4.5}  sm={4.5}>
+          <Grid item md={4.5} lg={4.5} sm={4.5}>
             <SideBar>
               {showProfile ? (
                 <Profile
@@ -448,7 +461,7 @@ export default function Home() {
               )}
             </SideBar>
           </Grid>
-          <RightBar item md={7.5}  sm={7.5} lg={7.5} style={{ float: "right" }}>
+          <RightBar item md={7.5} sm={7.5} lg={7.5} style={{ float: "right" }}>
             {currentChat && (
               <>
                 <div style={{ position: "relative", maxWidth: "100%" }}>
@@ -492,8 +505,19 @@ export default function Home() {
                   </ChatTopBar>
                 </div>
                 <Messages>
-                  {messages.map((m) => (
+                  {messages.map((m, index) => (
                     <>
+                      {!(
+                        index > 0 &&
+                        sameDayorNot(
+                          messages[index - 1].created_at,
+                          messages[index].created_at
+                        )
+                      ) && (
+                        <MessageDate>
+                          {getDisplayDate(m.created_at)}
+                        </MessageDate>
+                      )}
                       <Message
                         className={m.senderid == user.id && "own"}
                         ref={scrollit}

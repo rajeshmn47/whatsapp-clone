@@ -20,10 +20,8 @@ const headers = {
 };
 export const register = (myform) => async (dispatch) => {
   try {
-    console.log(myform, URL);
     dispatch({ type: REGISTER_USER_REQUEST });
     const { data } = await axios.post(`${URL}/auth/register`, { myform });
-    console.log(data);
     localStorage.setItem("server_token", data.server_token);
     dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
   } catch (error) {
