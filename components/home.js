@@ -61,6 +61,7 @@ const MessageDate = styled.div`
   max-width: 100px;
   text-align: center;
   margin: 0 auto;
+  text-transform: uppercase;
 `;
 
 const Tim = styled.div`
@@ -306,7 +307,7 @@ export default function Home() {
       setIsConnected(true);
 
       socket.emit("add user", {
-        userid: user.id,
+        userid: user?.id,
       });
     });
   }, [user]);

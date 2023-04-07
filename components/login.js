@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { login } from "../actions/userAction";
+import { login, logout } from "../actions/userAction";
 import styled from "@emotion/styled";
 
 const SignUp = styled.div`
@@ -49,6 +49,9 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const Route = useRouter();
   useEffect(() => {
+    dispatch(logout());
+  }, []);
+  useEffect(() => {
     if (error) {
     }
     if (isAuthenticated) {
@@ -60,7 +63,6 @@ export const Login = () => {
     console.log(username, password);
     const formdata = { username: username, password: password };
     dispatch(login(formdata));
-    Route.push("/");
     console.log("ok");
   };
   return (

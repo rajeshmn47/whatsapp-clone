@@ -208,6 +208,7 @@ const StoryContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100vw;
+  height: 100vh;
   background-color: #111b21;
   position: relative;
 `;

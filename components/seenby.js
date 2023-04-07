@@ -17,6 +17,7 @@ const Status = styled.div`
   color: #ffffff;
   display: flex;
   align-items: center;
+  z-index: 1000000;
   cursor: pointer;
   img {
     margin-right: 6px;
@@ -74,37 +75,46 @@ export default function SeenBy({ status }) {
     setShow(false);
   };
 
+  const handleClick = () => {
+    setShow(true);
+    console.log(show, "show");
+  };
+
   return (
     <>
       {user?.id == status?.posted_by && (
-        <Status onClick={() => setShow(true)}>
+        <Status onClick={() => handleClick()}>
           <img src="./view.svg" alt="" />
           <h3>{seenby && seenby}</h3>
         </Status>
       )}
-      <Dialog
-        open={show}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <TopBar>
-          <img
-            src="./closewhite.svg"
-            alt=""
-            onClick={() => setShow(false)}
-            style={{ cursor: "pointer" }}
-          />
-          <h6 style={{ fontSize: "18px", marginLeft: "10px" }}>
-            Viewed by {seenUsers?.length}
-          </h6>
-        </TopBar>
-        <Raise>
-          <h6>
-            {seenUsers.length > 0 && seenUsers.map((s) => <UserCarde i={s} />)}
-          </h6>
-        </Raise>
-      </Dialog>
+      <div style={{ width: "300px" }}>
+        <Dialog
+          open={show}
+          onClose={() => handleClose()}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          style={{ zIndex: "10" }}
+        >
+          <TopBar>
+            <img
+              src="./closewhite.svg"
+              alt=""
+              onClick={() => setShow(false)}
+              style={{ cursor: "pointer", zIndex: "1000000" }}
+            />
+            <h6 style={{ fontSize: "18px", marginLeft: "10px" }}>
+              Viewed by {seenUsers?.length}
+            </h6>
+          </TopBar>
+          <Raise>
+            <h6>
+              {seenUsers.length > 0 &&
+                seenUsers.map((s) => <UserCarde i={s} />)}
+            </h6>
+          </Raise>
+        </Dialog>
+      </div>
     </>
   );
 }
