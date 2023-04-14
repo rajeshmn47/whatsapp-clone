@@ -33,7 +33,7 @@ const Container = styled.div`
 const Messages = styled.div`
   margin-top: 100px;
   padding: 0 20px;
-  margin-bottom: 100px;
+  margin-bottom: 160px;
   .own {
     background-color: #d9fdd3;
     box-shadow: 0 1px 0.5px rgba(var(--shadow-rgb), 0.13);

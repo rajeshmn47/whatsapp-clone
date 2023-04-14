@@ -370,7 +370,7 @@ export default function Status({ setStatus }) {
             <Stories
               stories={[`${RURL}${selectedStatus.url}`]}
               width={732}
-              height={768}
+              height={650}
               currentIndex={currentIndex}
               onStoryEnd={handlestoryend}
             />
