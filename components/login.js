@@ -55,6 +55,7 @@ export const Login = () => {
     if (error) {
     }
     if (isAuthenticated) {
+      Route.push('/')
     }
   }, [dispatch, loading, isAuthenticated, user, error]);
 
