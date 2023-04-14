@@ -1,3 +1,13 @@
+I created a clone of DREAM 11 It has various features like
+<p>1)registration</p>
+<p>2)login</p>
+<p>3)messaging to users in the list</p>
+<p>4)instant messaging using socket.io</p>
+<p>5)status upload and check seen status</p>
+<p>6)edit profile</p>
+<p>7)sending emojis...</p>
+
+
 [Screencast from 02-04-23 04:08:31 PM IST.webm](https://user-images.githubusercontent.com/24763499/229348034-d163a52c-e121-4334-8c86-60ef8447c25f.webm)
 ![Screenshot from 2023-03-13 20-02-44](https://user-images.githubusercontent.com/24763499/224774613-f27f99e6-d6d7-4b42-bf8d-6d447129c27a.png)
 ![Screenshot from 2023-03-13 22-27-35](https://user-images.githubusercontent.com/24763499/224774643-d6c872aa-ddac-4c3e-9e2d-3aa1d3fa9f29.png)
