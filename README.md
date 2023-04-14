@@ -1,4 +1,4 @@
-I created a clone of DREAM 11 It has various features like
+I created a clone of WHATSAPP WEB It has various features like
 <p>1)registration</p>
 <p>2)login</p>
 <p>3)messaging to users in the list</p>
