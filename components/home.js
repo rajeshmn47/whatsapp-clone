@@ -124,7 +124,8 @@ const SideBar = styled.div`
   left: 0;
   top: 0;
   width: 37.5%;
-  height: 100%;
+  height: 100vh;
+  overflow-y: auto;
 `;
 
 const BottomBar = styled.div`
@@ -220,11 +221,11 @@ export default function Home() {
         );
         console.log(data, "cong");
         setConversation(data.data.user);
-        const dat = await axios.get(
-          `http://localhost:4000/onlinestatus/${currentChat.id}`
-        );
-        console.log(dat, "onlinestatus");
-        setOnlineStatus(dat?.data[0]?.userid == currentChat.id);
+        // const dat = await axios.get(
+        //  `http://localhost:4000/onlinestatus/${currentChat.id}`
+        //);
+        //console.log(dat, "onlinestatus");
+        // setOnlineStatus(dat?.data[0]?.userid == currentChat.id);
       }
     }
     getchat();
