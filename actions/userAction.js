@@ -41,8 +41,8 @@ export const login = (myform) => async (dispatch) => {
     console.log(data);
     localStorage.setItem("server_token", data.token);
     dispatch({ type: LOGIN_SUCCESS, payload: data.user });
-    loadUser()
-    loadToken()
+    loadUser();
+    loadToken();
   } catch (error) {
     console.log(error.response, "asdfgh");
     dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });

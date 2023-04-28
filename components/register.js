@@ -54,7 +54,6 @@ export const Signup = () => {
     if (error) {
     }
     if (isAuthenticated) {
-
     }
   }, [dispatch, loading, isAuthenticated, user, error]);
 
@@ -63,7 +62,6 @@ export const Signup = () => {
     console.log(username, password);
     const formdata = { username: username, password: password };
     dispatch(register(formdata));
-    
   };
   return (
     <>
@@ -109,7 +107,7 @@ export const Signup = () => {
             </a>
           </ul>
         </div>
-        {isAuthenticated&&<h5>registered successfully</h5>}
+        {isAuthenticated && <h5>registered successfully</h5>}
       </SignUp>
     </>
   );

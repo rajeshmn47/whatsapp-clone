@@ -53,7 +53,7 @@ export const Login = () => {
   }, []);
   useEffect(() => {
     if (isAuthenticated) {
-      Route.push('/')
+      Route.push("/");
     }
   }, [dispatch, loading, isAuthenticated, user, error]);
 
@@ -89,7 +89,7 @@ export const Login = () => {
             </div>
             <SubmitBtn type="submit" className="submitbutton" value="Log in" />
           </form>
-          {error&&<h3>wrong password or username</h3>}
+          {error && <h3>wrong password or username</h3>}
           <ul style={{ marginTop: "15px" }}>
             if u dont have account{" "}
             <a

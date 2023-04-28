@@ -139,7 +139,7 @@ const RightBar = styled(Grid)`
 `;
 export default function Home() {
   const dispatch = useDispatch();
-  const socket = io.connect("http://localhost:7000");
+  const socket = "y"; //io.connect("http://localhost:7000");
   const [users, setUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState();
   const [showProfile, setShowProfile] = useState(false);
@@ -183,7 +183,7 @@ export default function Home() {
   useEffect(() => {
     async function getconversations() {
       try {
-        if (user?.id&&token) {
+        if (user?.id && token) {
           const data = await axios.get(
             `${URL}/conversation/getconversations/${user?.id}`,
             {
@@ -202,7 +202,7 @@ export default function Home() {
       }
     }
     getconversations();
-  }, [user, token,router]);
+  }, [user, token, router]);
   useEffect(() => {
     async function getchat() {
       if (currentChat?.id && token) {
@@ -228,7 +228,7 @@ export default function Home() {
       }
     }
     getchat();
-  }, [currentChat, token,user,router]);
+  }, [currentChat, token, user, router]);
   useEffect(() => {
     async function getchat() {
       if (conversation?.members && user?.id && token) {
@@ -258,58 +258,70 @@ export default function Home() {
   }, [newm]);
 
   useEffect(() => {
-    socket.on("disconnect", () => {
-      setIsConnected(false);
-    });
+    try {
+      socket.on("disconnect", () => {
+        setIsConnected(false);
+      });
 
-    socket.on("ponged", () => {
-      setLastPong(new Date().toISOString());
-    });
-    socket.on("new message", async (data) => {
-      console.log(data, "newmessa");
-      let url = "./notifications.mp3";
-      let audio = new Audio(url);
-      audio.play();
-      setMessages((messages) => [...messages,data.message]);
-      if (newm) {
-        setNewm(newm + 1);
-      } else {
-        setNewm(1);
-      }
-      try {
-        if (user?.id) {
-          const data = await axios.get(
-            `${URL}/conversation/getconversations/${user?.id}`
-          );
-          console.log(data.data, "conversations");
-          setConversations([...data.data.user]);
+      socket.on("ponged", () => {
+        setLastPong(new Date().toISOString());
+      });
+      socket.on("new message", async (data) => {
+        console.log(data, "newmessa");
+        let url = "./notifications.mp3";
+        let audio = new Audio(url);
+        audio.play();
+        setMessages((messages) => [...messages, data.message]);
+        if (newm) {
+          setNewm(newm + 1);
+        } else {
+          setNewm(1);
         }
-      } catch {
-        console.log(error);
-      }
-    });
+        try {
+          if (user?.id) {
+            const data = await axios.get(
+              `${URL}/conversation/getconversations/${user?.id}`
+            );
+            console.log(data.data, "conversations");
+            setConversations([...data.data.user]);
+          }
+        } catch {
+          console.log(error);
+        }
+      });
 
-    socket.on("typing", (data) => {
-      console.log(data, "typing");
-      setTyped(data);
-    });
+      socket.on("typing", (data) => {
+        console.log(data, "typing");
+        setTyped(data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
     return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("pong");
+      try {
+        socket.off("connect");
+        socket.off("disconnect");
+        socket.off("pong");
+      } catch (err) {
+        console.log(err);
+      }
     };
   }, []);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connect");
-      setIsConnected(true);
+    try {
+      socket.on("connect", () => {
+        console.log("connect");
+        setIsConnected(true);
 
-      socket.emit("add user", {
-        userid: user?.id,
+        socket.emit("add user", {
+          userid: user?.id,
+        });
       });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   }, [user]);
 
   const sendPing = () => {
