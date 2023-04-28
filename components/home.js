@@ -129,7 +129,6 @@ const SideBar = styled.div`
 `;
 
 const BottomBar = styled.div`
-  height: 600px;
   background-color: #ffffff;
 `;
 
