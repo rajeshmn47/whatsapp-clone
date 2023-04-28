@@ -139,7 +139,7 @@ const RightBar = styled(Grid)`
 `;
 export default function Home() {
   const dispatch = useDispatch();
-  const socket = io.connect("http://localhost:4000");
+  const socket = io.connect("http://localhost:7000");
   const [users, setUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState();
   const [showProfile, setShowProfile] = useState(false);
@@ -228,7 +228,7 @@ export default function Home() {
       }
     }
     getchat();
-  }, [currentChat, token]);
+  }, [currentChat, token,user]);
   useEffect(() => {
     async function getchat() {
       if (conversation?.members && user?.id && token) {
@@ -270,7 +270,7 @@ export default function Home() {
       let url = "./notifications.mp3";
       let audio = new Audio(url);
       audio.play();
-      setMessages([...messages, data.message]);
+      setMessages((messages) => [...messages,data.message]);
       if (newm) {
         setNewm(newm + 1);
       } else {

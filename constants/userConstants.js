@@ -60,7 +60,7 @@ function geturl() {
   if (current == "local") {
     return "http://localhost:9000";
   } else {
-    return "http://localhost:9000";
+    return "https://whatsapp-clone-m52a.onrender.com";
   }
 }
 
