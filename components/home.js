@@ -183,7 +183,7 @@ export default function Home() {
   useEffect(() => {
     async function getconversations() {
       try {
-        if (user?.id) {
+        if (user?.id&&token) {
           const data = await axios.get(
             `${URL}/conversation/getconversations/${user?.id}`,
             {
@@ -202,7 +202,7 @@ export default function Home() {
       }
     }
     getconversations();
-  }, [user, token]);
+  }, [user, token,router]);
   useEffect(() => {
     async function getchat() {
       if (currentChat?.id && token) {
@@ -228,7 +228,7 @@ export default function Home() {
       }
     }
     getchat();
-  }, [currentChat, token,user]);
+  }, [currentChat, token,user,router]);
   useEffect(() => {
     async function getchat() {
       if (conversation?.members && user?.id && token) {

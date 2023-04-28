@@ -41,6 +41,7 @@ function MyApp({ Component, pageProps, ...rest }) {
   }, [dispatch]);
   useEffect(() => {
     console.log(user, "raveena");
+    dispatch(loadToken());
   }, [user]);
 
   return (
