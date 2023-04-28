@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import moment from "moment";
 import { RURL } from "../constants/userConstants";
 import { useSelector } from "react-redux";
-import { getDisplayDate } from "../utils/dateformat,js";
+import { getDisplayDate } from "../utils/dateformat.js";
 
 const Chat = styled.div`
   display: flex;

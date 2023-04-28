@@ -13,7 +13,7 @@ import ReactEmoji from "react-emoji";
 import InputContainer from "./inputfield";
 import Profile from "./profile";
 import ChatInput from "./chatinput";
-import { getDisplayDate, getSamedayorNot } from "../utils/dateformat,js";
+import { getDisplayDate, getSamedayorNot } from "../utils/dateformat.js";
 import Chats from "./chats";
 import { URL } from "../constants/userConstants";
 import { useEffect, useState, useRef } from "react";
@@ -22,7 +22,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import Status from "./status";
 import { addnewm } from "../actions/userAction";
-import { sameDayorNot } from "../utils/dateformat,js";
+import { sameDayorNot } from "../utils/dateformat.js";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -349,12 +349,12 @@ export default function Home() {
       data.data.messages.conversationid.split("+")[0] == user.id
         ? data.data.messages.conversationid.split("+")[1]
         : data.data.messages.conversationid.split("+")[0];
-    socket.emit("new message", {
-      message: message,
-      recieverid: recieverid,
-      senderid: user.id,
-      conversationid: conversation.members,
-    });
+    //socket.emit("new message", {
+    //message: message,
+    // recieverid: recieverid,
+    // senderid: user.id,
+    // conversationid: conversation.members,
+    // });
     setMessages([...messages, data.data.messages]);
     console.log(messages, "mui");
     setMessage("");
@@ -378,10 +378,10 @@ export default function Home() {
 
   const handleChange = (e, r) => {
     setMessage(e.target.value);
-    socket.emit("typing", {
-      userid: user.id,
-      recieverid: r,
-    });
+    //socket.emit("typing", {
+    //userid: user.id,
+    //recieverid: r,
+    // });
   };
   return (
     <Container>

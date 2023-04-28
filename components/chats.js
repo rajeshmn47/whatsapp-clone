@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
 import { URL } from "../constants/userConstants";
+import { sortconversations } from "../utils/dateformat";
 import UserCard from "./UserCard";
 import UserCarde from "./UserCarde";
 import UserChat from "./UserChat";
@@ -84,6 +85,7 @@ export default function Chats({
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
+  console.log(conversations, "conversations");
   const handleClick = (a) => {
     setCurrentChat(users.find((u) => u.id == a));
   };
@@ -103,7 +105,6 @@ export default function Chats({
                       <div style={{ width: "13%" }}>
                         <UserChat i={c?.id} u={c} />
                       </div>
-
                       <Time>19:56</Time>
                     </Chat>
                   </ChatC>
@@ -113,7 +114,7 @@ export default function Chats({
       ) : (
         <ChatsContainer>
           {conversations?.length > 0 &&
-            conversations.map((c, index) =>
+            sortconversations(conversations)?.map((c, index) =>
               c.memberone != user?.id ? (
                 <ChatC
                   onClick={() => handleClick(c.memberone)}
