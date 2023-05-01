@@ -100,12 +100,7 @@ export default function UserChat({ i, newm, u }) {
               <Username>{use?.name}</Username>
               <Time>
                 {newm.filter((n) => n.senderid == user?.id).length > 0 &&
-                  getDisplayDate(
-                    newm.filter((n) => n.senderid == user?.id)[
-                      newm.filter((n) => n.senderid == user?.id).length - 1
-                    ].created_at,
-                    "date"
-                  )}
+                  getDisplayDate(newm[newm.length - 1].created_at, "date")}
               </Time>
             </Bottom>
             {newm?.length > 0 &&

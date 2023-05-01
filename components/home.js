@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import WhatsappIcon from "./icon";
 import UserIcon from "./usericon.jsx";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -7,7 +7,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { MoreHoriz } from "@mui/icons-material";
+import { MoreHoriz, SettingsPowerRounded } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import ReactEmoji from "react-emoji";
 import InputContainer from "./inputfield";
@@ -23,6 +23,7 @@ import io from "socket.io-client";
 import Status from "./status";
 import { addnewm } from "../actions/userAction";
 import { sameDayorNot } from "../utils/dateformat.js";
+import Menu from "./menu";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -155,6 +156,14 @@ export default function Home() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [status, setStatus] = useState(false);
   const [lastPong, setLastPong] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const headers = {
     Accept: "application/json",
   };
@@ -444,11 +453,30 @@ export default function Home() {
                           style={{ cursor: "pointer" }}
                           onClick={() => setShowUsers(true)}
                         />
-                        <img
-                          src="./more.svg"
-                          alt=""
-                          style={{ cursor: "pointer" }}
-                        />
+                        <div>
+                          <Button
+                            id="basic-button"
+                            aria-controls={open ? "basic-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                            onClick={handleClick}
+                            style={{ minWidth: "auto", padding: "5px 0" }}
+                          >
+                            <img
+                              src="./more.svg"
+                              alt=""
+                              style={{ cursor: "pointer", marginRight: "0" }}
+                            />
+                          </Button>
+
+                          <Menu
+                            open={open}
+                            anchorEl={anchorEl}
+                            setAnchorEl={setAnchorEl}
+                            handleClick={handleClick}
+                            handleClose={handleClose}
+                          />
+                        </div>
                       </Grid>
                     </Grid>
                   </TopBar>

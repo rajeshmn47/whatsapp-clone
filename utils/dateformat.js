@@ -52,10 +52,10 @@ export function sortconversations(arr) {
     arr[0]?.newmessage[arr[0]?.newmessage.length - 1]?.created_at,
     "date"
   );
-  arr.sort(
+  let krr = arr.sort(
     (a, b) =>
       new Date(b.newmessage[b?.newmessage?.length - 1]?.created_at) -
       new Date(a.newmessage[a?.newmessage?.length - 1]?.created_at)
   );
-  return arr;
+  return krr;
 }

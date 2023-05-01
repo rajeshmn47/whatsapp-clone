@@ -32,6 +32,7 @@ export default function InputContainer({
   handleChange,
   c,
 }) {
+  console.log(message, "newmessage");
   return (
     <Container>
       <Grid container>
