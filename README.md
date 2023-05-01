@@ -7,6 +7,7 @@ I created a clone of WHATSAPP WEB It has various features like
 <p>5)status upload and check seen status</p>
 <p>6)edit profile</p>
 <p>7)sending emojis...</p>
+<p>8)sending files</p>
 
 [Screencast from 02-04-23 04:08:31 PM IST.webm](https://user-images.githubusercontent.com/24763499/229348034-d163a52c-e121-4334-8c86-60ef8447c25f.webm)
 ![Screenshot from 2023-03-13 20-02-44](https://user-images.githubusercontent.com/24763499/224774613-f27f99e6-d6d7-4b42-bf8d-6d447129c27a.png)
