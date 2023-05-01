@@ -62,7 +62,7 @@ export const Login = () => {
     console.log(username, password);
     const formdata = { username: username, password: password };
     dispatch(login(formdata));
-    console.log("ok");
+    console.log("o");
   };
   return (
     <>
