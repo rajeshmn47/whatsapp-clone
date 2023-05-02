@@ -24,6 +24,7 @@ import Status from "./status";
 import { addnewm } from "../actions/userAction";
 import { sameDayorNot } from "../utils/dateformat.js";
 import Menu from "./menu";
+import { checkseenstatus } from "../utils/seen";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -138,6 +139,18 @@ const RightBar = styled(Grid)`
   background-color: #efeae2;
   z-index: 100;
 `;
+
+const NotSeen = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #1ca14d !important;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 5px;
+`;
+
 export default function Home() {
   const dispatch = useDispatch();
   const socket = "y"; //io.connect("http://localhost:7000");
@@ -150,6 +163,7 @@ export default function Home() {
   const [message, setMessage] = useState();
   const scrollit = useRef();
   const [messages, setMessages] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const [newm, setNewm] = useState();
   const [typed, setTyped] = useState();
   const [onlineStatus, setOnlineStatus] = useState();
@@ -176,7 +190,9 @@ export default function Home() {
     async function getusers() {
       try {
         const data = await axios.get(`${URL}/auth/users`);
-
+        const dataA = await axios.get(`${URL}/status/allstatus`);
+        setStatuses(dataA.data.data);
+        console.log(statuses, dataA.data, "statuses");
         setUsers([...data.data.message]);
       } catch {
         console.log(error);
@@ -441,18 +457,29 @@ export default function Home() {
                           alt=""
                           style={{ cursor: "pointer" }}
                         />
-                        <img
-                          src="./status.svg"
-                          alt=""
-                          style={{ cursor: "pointer" }}
-                          onClick={() => setStatus(true)}
-                        />
+                        {statuses.length > 0 &&
+                          (checkseenstatus(statuses, user.id) ? (
+                            <img
+                              src="./status.svg"
+                              alt=""
+                              style={{ cursor: "pointer", width: "28px" }}
+                              onClick={() => setStatus(true)}
+                            />
+                          ) : (
+                            <img
+                              src="./notseen.svg"
+                              alt=""
+                              style={{ cursor: "pointer", width: "28px" }}
+                              onClick={() => setStatus(true)}
+                            />
+                          ))}
                         <img
                           src="./chat.svg"
                           alt=""
                           style={{ cursor: "pointer" }}
                           onClick={() => setShowUsers(true)}
                         />
+
                         <div>
                           <Button
                             id="basic-button"
