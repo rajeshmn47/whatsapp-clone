@@ -21,7 +21,7 @@ import moment from "moment";
 import axios from "axios";
 import io from "socket.io-client";
 import Status from "./status";
-import { addnewm } from "../actions/userAction";
+import { addnewm, logout } from "../actions/userAction";
 import { sameDayorNot } from "../utils/dateformat.js";
 import Menu from "./menu";
 import { checkseenstatus } from "../utils/seen";
@@ -175,7 +175,10 @@ export default function Home() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (index) => {
+    if (index == 5) {
+      dispatch(logout());
+    }
     setAnchorEl(null);
   };
   const headers = {
