@@ -15,6 +15,7 @@ import io from "socket.io-client";
 import { Button, Grid } from "@mui/material";
 import Stories from "react-insta-stories";
 import UserCard from "./UserCard";
+import { filteredstatus } from "../utils/seen";
 
 const Container = styled.div`
   background-color: #f0f2f5;
@@ -141,6 +142,16 @@ const UserImge = styled.img`
   object-fit: cover;
   margin-right: 5px;
   border: 1px solid #ffffff;
+  padding: 2px;
+`;
+
+const UserImges = styled.img`
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 5px;
+  border: 1px solid green;
   padding: 2px;
 `;
 
@@ -409,27 +420,50 @@ export default function Status({ setStatus }) {
                       )}
                   </Statuses>
                 </MyStatus>
-
-                <Statuses>
-                  <p style={{ color: "rgb(151, 149, 149)" }}>VIEWED</p>
-                  {statuses.length > 0 &&
-                    statuses.map(
-                      (s) =>
-                        user?.id != s.posted_by && (
-                          <Statuse onClick={() => handleSelect(s)}>
-                            <UserImge src={`${RURL}${s.url}`} alt="" />
-                            <div style={{ margin: "0 15px" }}>
-                              <Name>
-                                <UserCard i={s.posted_by} />
-                              </Name>
-                              <DateA>
-                                {moment(s.created_at).format("HH:mm")}
-                              </DateA>
-                            </div>
-                          </Statuse>
-                        )
-                    )}
-                </Statuses>
+                {filteredstatus(statuses, user.id, "unseen").length > 0 && (
+                  <Statuses>
+                    <p style={{ color: "rgb(151, 149, 149)" }}>RECENT</p>
+                    {filteredstatus(statuses, user.id, "unseen").length > 0 &&
+                      filteredstatus(statuses, user.id, "unseen").map(
+                        (s) =>
+                          user?.id != s.posted_by && (
+                            <Statuse onClick={() => handleSelect(s)}>
+                              <UserImges src={`${RURL}${s.url}`} alt="" />
+                              <div style={{ margin: "0 15px" }}>
+                                <Name>
+                                  <UserCard i={s.posted_by} />
+                                </Name>
+                                <DateA>
+                                  {moment(s.created_at).format("HH:mm")}
+                                </DateA>
+                              </div>
+                            </Statuse>
+                          )
+                      )}
+                  </Statuses>
+                )}
+                {filteredstatus(statuses, user.id, "seen").length > 0 && (
+                  <Statuses>
+                    <p style={{ color: "rgb(151, 149, 149)" }}>VIEWED</p>
+                    {filteredstatus(statuses, user.id, "seen").length > 0 &&
+                      filteredstatus(statuses, user.id, "seen").map(
+                        (s) =>
+                          user?.id != s.posted_by && (
+                            <Statuse onClick={() => handleSelect(s)}>
+                              <UserImge src={`${RURL}${s.url}`} alt="" />
+                              <div style={{ margin: "0 15px" }}>
+                                <Name>
+                                  <UserCard i={s.posted_by} />
+                                </Name>
+                                <DateA>
+                                  {moment(s.created_at).format("HH:mm")}
+                                </DateA>
+                              </div>
+                            </Statuse>
+                          )
+                      )}
+                  </Statuses>
+                )}
                 <Upload>
                   <Button component="label">
                     {image ? (
