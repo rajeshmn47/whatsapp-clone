@@ -76,7 +76,7 @@ export const loadUser = () => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   try {
     localStorage.removeItem("server_token");
-    dispatch(loadUser())
+    dispatch(loadUser());
   } catch (error) {
     console.log(error.response, "asdfgh");
     dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });

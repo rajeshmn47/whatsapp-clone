@@ -37,11 +37,11 @@ export default function Menuz({
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
-      {options.map((option,index) => (
+      {options.map((option, index) => (
         <MenuItem
           key={option}
           selected={option === "Pyxis"}
-          onClick={()=>handleClose(index)}
+          onClick={() => handleClose(index)}
         >
           {option}
         </MenuItem>

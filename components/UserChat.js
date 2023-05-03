@@ -5,6 +5,7 @@ import moment from "moment";
 import { RURL } from "../constants/userConstants";
 import { useSelector } from "react-redux";
 import { getDisplayDate } from "../utils/dateformat.js";
+import { posted_status } from "../utils/seen";
 
 const Chat = styled.div`
   display: flex;
@@ -23,6 +24,15 @@ const UserImg = styled.img`
   margin-right: 15px;
 `;
 
+const UserImge = styled.img`
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  border: 2px solid green;
+  object-fit: cover;
+  margin-right: 15px;
+  padding: 2px;
+`;
 const Details = styled.div`
   width: 80%;
 `;
@@ -74,8 +84,8 @@ const New = styled.div`
   background-color: #1fa855;
 `;
 
-export default function UserChat({ i, newm, u }) {
-  const [use, setUser] = useState();
+export default function UserChat({ i, newm, u, statuses }) {
+  const [use, setUse] = useState();
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
@@ -83,7 +93,7 @@ export default function UserChat({ i, newm, u }) {
     async function getUser() {
       if (i) {
         const data = await axios.get(`${RURL}/auth/getuser/${i}`);
-        setUser(data.data.data);
+        setUse(data.data.data);
       }
     }
     getUser();
@@ -93,7 +103,11 @@ export default function UserChat({ i, newm, u }) {
       {newm ? (
         <Chat>
           <div style={{ width: "" }}>
-            <UserImg src={`${RURL}${use?.profilephoto}`} alt="" />
+            {use && posted_status(statuses, user.id, use.id, use) ? (
+              <UserImge src={`${RURL}${use?.profilephoto}`} alt="" />
+            ) : (
+              <UserImg src={`${RURL}${use?.profilephoto}`} alt="" />
+            )}
           </div>
           <Details>
             <Bottom>

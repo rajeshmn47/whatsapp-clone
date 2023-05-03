@@ -525,6 +525,7 @@ export default function Home() {
                       conversations={conversations}
                       currentChat={currentChat}
                       setCurrentChat={setCurrentChat}
+                      statuses={statuses}
                     />
                   )}
                   <BottomBar></BottomBar>

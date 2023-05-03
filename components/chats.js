@@ -81,6 +81,7 @@ export default function Chats({
   conversations,
   currentChat,
   setCurrentChat,
+  statuses,
 }) {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
@@ -122,7 +123,11 @@ export default function Chats({
                 >
                   <Chat>
                     <div style={{ width: "13%" }}>
-                      <UserChat i={c?.memberone} newm={c.newmessage} />
+                      <UserChat
+                        i={c?.memberone}
+                        newm={c.newmessage}
+                        statuses={statuses}
+                      />
                     </div>
                   </Chat>
                 </ChatC>
@@ -133,7 +138,12 @@ export default function Chats({
                 >
                   <Chat>
                     <div style={{ width: "13%" }}>
-                      <UserChat i={c?.membertwo} newm={c.newmessage} />
+                      <UserChat
+                        i={c?.membertwo}
+                        newm={c.newmessage}
+                        u="ok"
+                        statuses={statuses}
+                      />
                     </div>
                   </Chat>
                 </ChatC>
